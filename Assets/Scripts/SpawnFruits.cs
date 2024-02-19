@@ -9,7 +9,7 @@ public class SpawnFruits : MonoBehaviour
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
 
     private readonly int FIRST_CREATE_FRUIT_KINDS = 4;
-    private readonly Vector3 k_firstCreatePosition = new Vector3(-20.0f, 240.0f, 450.0f);
+    private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 240.0f, 450.0f);
     private readonly Vector3 k_beforeExplosionSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     // null許容型　初期化するときもnullにする
@@ -20,10 +20,12 @@ public class SpawnFruits : MonoBehaviour
     private GameObject _nextFruit = null;
     [SerializeField] private GameObject _baseSphere;
     private InitializeFruits _initializeFruits = null;
+    private ScoreManager _scoreManager = null;
 
     private void Start()
     {
         _gameManager = GetComponent<GameManager>();
+        _scoreManager = GetComponent<ScoreManager>();
         _initializeFruits = _gameManager._initializeFruits;
     }
 
@@ -61,7 +63,7 @@ public class SpawnFruits : MonoBehaviour
     public void MoveNextFruitPositionX(bool isRight)
     {
         if (_nextFruit == null) return;
-        var moveLength = new Vector3(4.0f, 0.0f, 0.0f);
+        var moveLength = new Vector3(0.5f, 0.0f, 0.0f);
         _nextFruit.transform.position += isRight ? moveLength : -moveLength;
         // TODO: 移動制限を付ける
     }
@@ -69,7 +71,7 @@ public class SpawnFruits : MonoBehaviour
     public void MoveNextFruitPositionZ(bool isfront)
     {
         if (_nextFruit == null) return;
-        var moveLength = new Vector3(0.0f, 0.0f, 4.0f);
+        var moveLength = new Vector3(0.0f, 0.0f, 0.5f);
         _nextFruit.transform.position += isfront ? -moveLength : moveLength;
         // TODO: 移動制限を付ける
     }
@@ -137,10 +139,15 @@ public class SpawnFruits : MonoBehaviour
     public async void EvolutionFruit(GameManager.FruitsKinds beforeFruit, Vector3 createPosition)
     {
         int nextFruit = (int)beforeFruit + 1;
+        var fruitBase = _initializeFruits.GetFruitsBase(nextFruit);
+        // フルーツのスコア加算
+        _scoreManager.AddScore(fruitBase.score);
+
         // TODO:スイカが2つくっついたときの対処
 
         // マテリアルしゅとく
-        var material = await _initializeFruits.GetFruitMaterial(nextFruit);
+        //var material = await _initializeFruits.GetFruitMaterial(nextFruit);
+        var material = fruitBase.fruitMaterial;
 
         // 生成
         GameObject evolusionFruit = Instantiate(_baseSphere, createPosition, Quaternion.identity);
@@ -148,21 +155,24 @@ public class SpawnFruits : MonoBehaviour
         evolusionFruit.transform.localScale = k_beforeExplosionSize;
 
         // gameObjectの名前をフルーツの種類にする
-        evolusionFruit.name = _initializeFruits.GetFruitName(nextFruit);
+        //evolusionFruit.name = _initializeFruits.GetFruitName(nextFruit);
+        evolusionFruit.name = fruitBase.fruitName;
 
         // フルーツの種類を与える
-        var fruitKind = _initializeFruits.GetFruitKind(nextFruit);
-        evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
+        //var fruitKind = _initializeFruits.GetFruitKind(nextFruit);
+        //evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
+        evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitBase.fruitsKinds);
         evolusionFruit.GetComponent<MeshRenderer>().material = material;
-        //evolusionFruit.AddComponent<Rigidbody>();
         evolusionFruit.GetComponent<Rigidbody>().useGravity = true;
 
         // GameManagerの子オブジェクトにする
         evolusionFruit.transform.SetParent(this.transform);
 
         // 一気にフルーツを元のサイズまで拡大する
-        Vector3 fruitsSize = await _initializeFruits.GetFruitSize(nextFruit);
-        evolusionFruit.transform.DOScale(fruitsSize, 0.1f);
+        //Vector3 fruitsSize = await _initializeFruits.GetFruitSize(nextFruit);
+        float fruitsSize = fruitBase.fruitSize;
+        Vector3 fruitSize = new Vector3(fruitsSize, fruitsSize, fruitsSize);
+        evolusionFruit.transform.DOScale(fruitSize, 0.1f);
 
         // 使った変数の初期化
         Initiate();

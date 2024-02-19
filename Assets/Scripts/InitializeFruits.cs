@@ -12,11 +12,6 @@ public class InitializeFruits
     private bool EndInitializeList = false;
     private List<FruitsBase> fruitsBase = new List<FruitsBase>();
 
-    async void Start()
-    {
-        //await SetFruitsMaterial();
-    }
-
     // 
     public async Task InitializeList()
     {
@@ -84,7 +79,7 @@ public class InitializeFruits
 
             await UniTask.WaitUntil(() => complete == true);
             fruitsBase[i].SetMaterial(material);
-            if (fruitsBase[i].fruitMaterial == null) Debug.LogError(fruitsBase[i].fruitName +" : マテリアルの取得に失敗しました。");
+            //if (fruitsBase[i].fruitMaterial == null) Debug.LogError(fruitsBase[i].fruitName +" : マテリアルの取得に失敗しました。");
         }
     }
 
@@ -139,6 +134,15 @@ public class InitializeFruits
     //        return fruitMaterial;
     //    });
     //}
+
+    
+    // フルーツの要素全部渡す
+    
+    
+    public FruitsBase GetFruitsBase(int fruitNumber)
+    {
+        return fruitsBase[fruitNumber];
+    }
 
     /// <summary>
     /// リストの要素を渡す

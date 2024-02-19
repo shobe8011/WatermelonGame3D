@@ -6,6 +6,8 @@ public class InputReceiver : MonoBehaviour
     private SpawnFruits _spawnFruit = null;
 
     private bool _isMainCameraView = true;
+    private bool _isCoolTime = false;
+    private float _clickCoolTime = 1.5f;
 
     private void Start()
     {
@@ -16,9 +18,19 @@ public class InputReceiver : MonoBehaviour
     private void Update()
     {
         // 左クリックでフルーツを落とす
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if(Input.GetKeyDown(KeyCode.Mouse0) && !_isCoolTime)
         {
+            _isCoolTime = true;
             _gameManager.SetFallFrag(true);
+            _clickCoolTime = 1.5f;
+        }
+        else
+        {
+            _clickCoolTime -= Time.deltaTime;
+            if(_clickCoolTime <= 0)
+            {
+                _isCoolTime = false;
+            }
         }
 
         // wasdでフルーツを落とす前に移動

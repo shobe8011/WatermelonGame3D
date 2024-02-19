@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
         Start,
         Set,
         Fall,
-        wait,
         GameOver,
     }
     private GameState _gameState = GameState.none;
@@ -36,19 +35,15 @@ public class GameManager : MonoBehaviour
 
     private SpawnFruits _spawnFruits = null;
     public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
+    private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
     private bool _canFall = false;
-    private float _waitTime = 10.0f;
 
-    // Start is called before the first frame update
-    async void Awake()
-    {
-        await _initializeFruits.InitializeList();
-    }
     async void Start()
     {
         _spawnFruits = GetComponent<SpawnFruits>();
-        //await _initializeFruits.InitializeList();
+        _scoreManager = GetComponent<ScoreManager>();
+        await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
         _gameState = GameState.Start;
     }
@@ -72,7 +67,6 @@ public class GameManager : MonoBehaviour
             // フルーツをセット
             case GameState.Set:
             {
-                _waitTime = 10.0f;
                 // フルーツをセット
                 _nextFruit = await _spawnFruits.SetNextFruit();
                 _gameState = GameState.Fall;
@@ -87,22 +81,11 @@ public class GameManager : MonoBehaviour
                 //await UniTask.WaitUntil(() => _canFall == true);
                 if (!_canFall || _nextFruit == null) return;
                 _canFall = false;
-                _canFall = await _spawnFruits.FallFruit(_nextFruit);
+                await _spawnFruits.FallFruit(_nextFruit);
                 _nextFruit = null;
                 _gameState = GameState.Set;
 
                 // フルーツがバーを超えたらゲームオーバー
-                break;
-            }
-
-            // フルーツが落ちるのを待つ
-            case GameState.wait:
-            {
-                _waitTime -= Time.deltaTime;
-                if(_waitTime <= 0.0f)
-                {
-                    _gameState = GameState.Set;
-                }
                 break;
             }
 
@@ -120,10 +103,10 @@ public class GameManager : MonoBehaviour
     private async void InitializeGame()
     {
         // ゲームに必要なUIをセットする
-        // await
+        _scoreManager.IniciateScore();
+        ChangeViewCamera(true);
 
         // ゲーム開始
-        //_canFall = true;
         _gameState = GameState.Set;
     }
 
