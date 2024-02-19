@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
         none,
     }
 
+    [SerializeField] Camera _MainCamera;
+    [SerializeField] Camera _TopCamera;
+
     private SpawnFruits _spawnFruits = null;
     public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
     private GameObject _nextFruit = null;
@@ -137,5 +140,12 @@ public class GameManager : MonoBehaviour
         {
             _canFall = canFall;
         }
+    }
+
+    // ƒJƒƒ‰Ø‚è‘Ö‚¦‚Ìƒtƒ‰ƒOó‚¯æ‚è
+    public void ChangeViewCamera(bool isMainCamera)
+    {
+        _MainCamera.enabled = isMainCamera;
+        _TopCamera.enabled = !isMainCamera;
     }
 }

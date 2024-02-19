@@ -5,6 +5,8 @@ public class InputReceiver : MonoBehaviour
     private GameManager _gameManager = null;
     private SpawnFruits _spawnFruit = null;
 
+    private bool _isMainCameraView = true;
+
     private void Start()
     {
         _gameManager = GetComponent<GameManager>();
@@ -35,6 +37,14 @@ public class InputReceiver : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             _spawnFruit.MoveNextFruitPositionX(true);
+        }
+
+        // C でカメラ切り替え
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            // カメラ表示のフラグを反転させる
+            _isMainCameraView = _isMainCameraView ? false : true;
+            _gameManager.ChangeViewCamera(_isMainCameraView);
         }
     }
 }
