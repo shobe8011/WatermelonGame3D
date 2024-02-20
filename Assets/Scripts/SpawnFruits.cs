@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Threading;  // cancellationTokenSource を使うために必要
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
 public class SpawnFruits : MonoBehaviour
 {
+    [SerializeField] private float move = 3.0f;
     private GameManager _gameManager = null;
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
@@ -17,6 +19,7 @@ public class SpawnFruits : MonoBehaviour
     private Vector3? _fruits2Pos = null;
     private Vector3? _HalfPoint = null;
 
+    private GameObject _fruitParent = null;
     private GameObject _nextFruit = null;
     [SerializeField] private GameObject _baseSphere;
     private InitializeFruits _initializeFruits = null;
@@ -27,43 +30,54 @@ public class SpawnFruits : MonoBehaviour
         _gameManager = GetComponent<GameManager>();
         _scoreManager = GetComponent<ScoreManager>();
         _initializeFruits = _gameManager._initializeFruits;
+
+        var cts = new CancellationTokenSource();
     }
 
     // 次に落とすフルーツを決め、初期位置にセット
-    public async UniTask<GameObject> SetNextFruit()
+    public async UniTask<GameObject> SetNextFruit(CancellationToken token)
     {
-        // まだ落とされていないフルーツがあったらreturn
-        if (_nextFruit != null) return null;
-        
-        // 生成前に必要なものを取得
-        int creatFruit;
-        creatFruit = Random.Range(0, FIRST_CREATE_FRUIT_KINDS);
-        Vector3 fruitsSize = await _initializeFruits.GetFruitSize(creatFruit);
-        // マテリアル取得
-        var material = await _initializeFruits.GetFruitMaterial(creatFruit);
+        try
+        {
+            // まだ落とされていないフルーツがあったらreturn
+            Debug.Log(token.IsCancellationRequested);
+            if (_nextFruit != null || token.IsCancellationRequested) return null;
 
-        // ゲームオブジェクトを生成
-        _nextFruit = Instantiate(_baseSphere, k_firstCreatePosition, Quaternion.identity);
+            // 生成前に必要なものを取得
+            int creatFruit;
+            creatFruit = Random.Range(0, FIRST_CREATE_FRUIT_KINDS);
+            Vector3 fruitsSize = await _initializeFruits.GetFruitSize(creatFruit);
+            // マテリアル取得
+            var material = await _initializeFruits.GetFruitMaterial(creatFruit);
 
-        // 取得したものを反映
-        _nextFruit.name = _initializeFruits.GetFruitName(creatFruit);
+            // ゲームオブジェクトを生成
+            _nextFruit = Instantiate(_baseSphere, k_firstCreatePosition, Quaternion.identity);
 
-        // フルーツの種類を与える
-        var fruitKind = _initializeFruits.GetFruitKind(creatFruit);
-        _nextFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
-        _nextFruit.transform.localScale = fruitsSize;
-        _nextFruit.GetComponent<MeshRenderer>().material = material;
+            // 取得したものを反映
+            _nextFruit.name = _initializeFruits.GetFruitName(creatFruit);
 
-        // GameManagerの子オブジェクトにする
-        _nextFruit.transform.SetParent(this.transform);
-        return _nextFruit;
+            // フルーツの種類を与える
+            var fruitKind = _initializeFruits.GetFruitKind(creatFruit);
+            _nextFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
+            _nextFruit.transform.localScale = fruitsSize;
+            _nextFruit.GetComponent<MeshRenderer>().material = material;
+
+            // GameManagerの子オブジェクトにする
+            _nextFruit.transform.SetParent(_fruitParent.transform);
+            return _nextFruit;
+        }
+        catch
+        {
+            Debug.Log("生成キャンセル");
+            return null;
+        }
     }
 
     // 次に落とすフルーツを移動させる
     public void MoveNextFruitPositionX(bool isRight)
     {
         if (_nextFruit == null) return;
-        var moveLength = new Vector3(0.5f, 0.0f, 0.0f);
+        var moveLength = new Vector3(move, 0.0f, 0.0f);
         _nextFruit.transform.position += isRight ? moveLength : -moveLength;
         // TODO: 移動制限を付ける
     }
@@ -71,7 +85,7 @@ public class SpawnFruits : MonoBehaviour
     public void MoveNextFruitPositionZ(bool isfront)
     {
         if (_nextFruit == null) return;
-        var moveLength = new Vector3(0.0f, 0.0f, 0.5f);
+        var moveLength = new Vector3(0.0f, 0.0f, move);
         _nextFruit.transform.position += isfront ? -moveLength : moveLength;
         // TODO: 移動制限を付ける
     }
@@ -79,27 +93,26 @@ public class SpawnFruits : MonoBehaviour
     /// <summary>
     /// フルーツを落とす
     /// </summary>
-    public async UniTask<bool> FallFruit(GameObject fallFruit)
+    public async UniTask FallFruit(GameObject fallFruit, CancellationToken token)
     {
-        // TODO:フルーツを落とすフラグを作る
-        if (fallFruit == null) return false;
-        Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
-        //fallFruit.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-        //rb.isKinematic = true;
-        //fallFruit.GetComponent<Rigidbody>().mass = 1000.0f;
-        // 落ちるのが遅いから、落とすときに、下方向の力を加えた方がいいかも
-        //fallFruit.GetComponent<Rigidbody>().AddForce(0.0f, -1000.0f, 0.0f, ForceMode.Impulse);
-        //rb.AddForce(0.0f, -500.0f, 0.0f, ForceMode.Impulse);
-        rb.AddForce(rb.mass * Vector3.down * 500.0f, ForceMode.Impulse);
-        //rb.AddForceAtPosition
+        try
+        {
+            // キャンセルの命令が出たら処理をさせない
+            if (fallFruit == null || token.IsCancellationRequested) return;
+            Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
+            rb.useGravity = true;
 
-        _nextFruit = null;
+            // 落ちるのが遅いから、落とすときに下方向の力を加える
+            rb.AddForce(rb.mass * Vector3.down * 500.0f, ForceMode.Impulse);
+            _nextFruit = null;
 
-        // 落としたフルーツが次のフルーツとぶつからないように待つ
-        await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
-        //await UniTask.DelayFrame(1);
-        return false;
+            // 落としたフルーツが次のフルーツとぶつからないように待つ
+            await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
+        }
+        catch
+        {
+            Debug.Log("落とすのキャンセルされた");
+        }
     }
 
     // 同じフルーツ同士がくっついたときに進化先のフルーツの生成地点を求める
@@ -146,7 +159,6 @@ public class SpawnFruits : MonoBehaviour
         // TODO:スイカが2つくっついたときの対処
 
         // マテリアルしゅとく
-        //var material = await _initializeFruits.GetFruitMaterial(nextFruit);
         var material = fruitBase.fruitMaterial;
 
         // 生成
@@ -155,21 +167,17 @@ public class SpawnFruits : MonoBehaviour
         evolusionFruit.transform.localScale = k_beforeExplosionSize;
 
         // gameObjectの名前をフルーツの種類にする
-        //evolusionFruit.name = _initializeFruits.GetFruitName(nextFruit);
         evolusionFruit.name = fruitBase.fruitName;
 
         // フルーツの種類を与える
-        //var fruitKind = _initializeFruits.GetFruitKind(nextFruit);
-        //evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
         evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitBase.fruitsKinds);
         evolusionFruit.GetComponent<MeshRenderer>().material = material;
         evolusionFruit.GetComponent<Rigidbody>().useGravity = true;
 
         // GameManagerの子オブジェクトにする
-        evolusionFruit.transform.SetParent(this.transform);
+        evolusionFruit.transform.SetParent(_fruitParent.transform);
 
         // 一気にフルーツを元のサイズまで拡大する
-        //Vector3 fruitsSize = await _initializeFruits.GetFruitSize(nextFruit);
         float fruitsSize = fruitBase.fruitSize;
         Vector3 fruitSize = new Vector3(fruitsSize, fruitsSize, fruitsSize);
         evolusionFruit.transform.DOScale(fruitSize, 0.1f);
@@ -186,5 +194,12 @@ public class SpawnFruits : MonoBehaviour
         _HalfPoint = null;
         _fruitsKind1 = GameManager.FruitsKinds.none;
         _fruitsKind2 = GameManager.FruitsKinds.none;
+    }
+
+    // gameManagerで作成されたフルーツの親オブジェをもらう
+    public void Initialization(GameObject fruitsParent)
+    {
+        _fruitParent = fruitsParent;
+        _nextFruit = null;
     }
 }

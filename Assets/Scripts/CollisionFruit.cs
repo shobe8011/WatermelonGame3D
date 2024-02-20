@@ -18,7 +18,8 @@ public class CollisionFruit : MonoBehaviour
         if (_fruitsKinds == collisionFruitKind.GetFruitKind)
         {
             // 上のオブジェクトに次のフルーツを生成するように通知を飛ばす
-            var spawnFruit = this.transform.parent.GetComponent<SpawnFruits>();
+            var parent = this.transform.parent;
+            var spawnFruit = parent.transform.parent.GetComponent<SpawnFruits>();
             spawnFruit.CalcurationHalfPoint(_fruitsKinds, this.transform.position);
             Destroy(this.gameObject);
         }

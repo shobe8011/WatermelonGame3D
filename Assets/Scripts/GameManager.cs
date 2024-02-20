@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;  // cancellationTokenSource を使うために必要
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -32,11 +33,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Camera _MainCamera;
     [SerializeField] Camera _TopCamera;
+    [SerializeField] GameObject _gameOverText;
+    [SerializeField] GameObject _ReplayButton;
 
+    private CancellationTokenSource _cancelTokenSource;
+    private CancellationToken _cancelToken;
     private SpawnFruits _spawnFruits = null;
     public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
     private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
+    private GameObject _fruitParent = null;
     private bool _canFall = false;
 
     async void Start()
@@ -68,7 +74,9 @@ public class GameManager : MonoBehaviour
             case GameState.Set:
             {
                 // フルーツをセット
-                _nextFruit = await _spawnFruits.SetNextFruit();
+                Debug.LogError("set");
+                _nextFruit = await _spawnFruits.SetNextFruit(_cancelToken);
+                Debug.LogError("セット完了");
                 _gameState = GameState.Fall;
                 break;
             }
@@ -81,7 +89,7 @@ public class GameManager : MonoBehaviour
                 //await UniTask.WaitUntil(() => _canFall == true);
                 if (!_canFall || _nextFruit == null) return;
                 _canFall = false;
-                await _spawnFruits.FallFruit(_nextFruit);
+                await _spawnFruits.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;
                 _gameState = GameState.Set;
 
@@ -92,7 +100,9 @@ public class GameManager : MonoBehaviour
             // ゲームオーバー
             case GameState.GameOver:
             {
+                //Debug.Log("ゲーム終了");
                 // ゲームオーバーの画面表示
+                // TODO:ハイスコアの場合は保存
                 // リスタートボタンが押されたらステートを"start"に変える
                 break;
             }
@@ -102,9 +112,15 @@ public class GameManager : MonoBehaviour
     // ゲームの初期化
     private async void InitializeGame()
     {
+        _cancelTokenSource = new CancellationTokenSource();
+        _cancelToken = _cancelTokenSource.Token;
         // ゲームに必要なUIをセットする
         _scoreManager.IniciateScore();
         ChangeViewCamera(true);
+        GameObject newFruitsObj = new GameObject();
+        _fruitParent = Instantiate(newFruitsObj, this.transform.position, Quaternion.identity);
+        _fruitParent.transform.SetParent(this.transform);
+        _spawnFruits.Initialization(_fruitParent);
 
         // ゲーム開始
         _gameState = GameState.Set;
@@ -113,6 +129,7 @@ public class GameManager : MonoBehaviour
     // ゲームオーバーになったときの処理
     public void CallGameOver()
     {
+        ChangeViewCamera(true);
         _gameState = GameState.GameOver;
     }
 
@@ -130,5 +147,25 @@ public class GameManager : MonoBehaviour
     {
         _MainCamera.enabled = isMainCamera;
         _TopCamera.enabled = !isMainCamera;
+    }
+
+    // ゲームオーバーを検知
+    public void GameOver()
+    {
+        _gameState = GameState.GameOver;
+        _cancelTokenSource.Cancel();
+        _gameOverText.SetActive(true);
+        _ReplayButton.SetActive(true);
+        _cancelTokenSource.Dispose();
+        Debug.Log("gameOver");
+    }
+
+    // replay　ボタンがおされたとき
+    public void PushReplayButton()
+    {
+        _gameOverText.SetActive(false);
+        _ReplayButton.SetActive(false);
+        Destroy(_fruitParent);
+        _gameState = GameState.Start;
     }
 }
