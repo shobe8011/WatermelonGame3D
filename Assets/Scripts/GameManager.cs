@@ -74,9 +74,7 @@ public class GameManager : MonoBehaviour
             case GameState.Set:
             {
                 // フルーツをセット
-                Debug.LogError("set");
                 _nextFruit = await _spawnFruits.SetNextFruit(_cancelToken);
-                Debug.LogError("セット完了");
                 _gameState = GameState.Fall;
                 break;
             }
@@ -100,7 +98,6 @@ public class GameManager : MonoBehaviour
             // ゲームオーバー
             case GameState.GameOver:
             {
-                //Debug.Log("ゲーム終了");
                 // ゲームオーバーの画面表示
                 // TODO:ハイスコアの場合は保存
                 // リスタートボタンが押されたらステートを"start"に変える
