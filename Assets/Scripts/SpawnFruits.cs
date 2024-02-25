@@ -40,7 +40,6 @@ public class SpawnFruits : MonoBehaviour
         try
         {
             // まだ落とされていないフルーツがあったらreturn
-            Debug.Log(token.IsCancellationRequested);
             if (_nextFruit != null || token.IsCancellationRequested) return null;
 
             // 生成前に必要なものを取得
