@@ -154,6 +154,11 @@ public class GameManager : MonoBehaviour
         _gameOverText.SetActive(true);
         _ReplayButton.SetActive(true);
         _cancelTokenSource.Dispose();
+        if(_nextFruit != null)
+        {
+            Destroy(_nextFruit);
+            _nextFruit = null;
+        }
         Debug.Log("gameOver");
     }
 

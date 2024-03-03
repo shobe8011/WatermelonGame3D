@@ -5,6 +5,9 @@ using DG.Tweening;
 
 public class SpawnFruits : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audioClip;
+    [SerializeField] private AudioClip _FallSE;
+    [SerializeField] private AudioClip _BombSE;
     [SerializeField] private float move = 3.0f;
     private GameManager _gameManager = null;
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
@@ -98,6 +101,7 @@ public class SpawnFruits : MonoBehaviour
         {
             // キャンセルの命令が出たら処理をさせない
             if (fallFruit == null || token.IsCancellationRequested) return;
+            _audioClip.PlayOneShot(_FallSE);
             Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
             rb.useGravity = true;
 
@@ -180,6 +184,7 @@ public class SpawnFruits : MonoBehaviour
         float fruitsSize = fruitBase.fruitSize;
         Vector3 fruitSize = new Vector3(fruitsSize, fruitsSize, fruitsSize);
         evolusionFruit.transform.DOScale(fruitSize, 0.1f);
+        _audioClip.PlayOneShot(_BombSE);
 
         // 使った変数の初期化
         Initiate();
