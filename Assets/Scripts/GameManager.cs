@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
         Set,
         Fall,
         GameOver,
+        WaitReplay,
     }
     private GameState _gameState = GameState.none;
 
@@ -31,10 +32,11 @@ public class GameManager : MonoBehaviour
         none,
     }
 
-    [SerializeField] Camera _MainCamera;
-    [SerializeField] Camera _TopCamera;
-    [SerializeField] GameObject _gameOverText;
-    [SerializeField] GameObject _ReplayButton;
+    [SerializeField] private MoveWall _moveWall;
+    [SerializeField] private Camera _MainCamera;
+    [SerializeField] private Camera _TopCamera;
+    [SerializeField] private GameObject _gameOverText;
+    [SerializeField] private GameObject _ReplayButton;
 
     private CancellationTokenSource _cancelTokenSource;
     private CancellationToken _cancelToken;
@@ -82,16 +84,16 @@ public class GameManager : MonoBehaviour
             // 玉を落とす
             case GameState.Fall:
             {
-                // 玉を落とす
                 // フラグが true になるまで待機
-                //await UniTask.WaitUntil(() => _canFall == true);
                 if (!_canFall || _nextFruit == null) return;
                 _canFall = false;
                 await _spawnFruits.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;
-                _gameState = GameState.Set;
-
-                // フルーツがバーを超えたらゲームオーバー
+                // GameOverになっている可能性をチェック
+                if (_gameState == GameState.Fall)
+                {
+                    _gameState = GameState.Set;
+                }
                 break;
             }
 
@@ -99,9 +101,15 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
             {
                 // ゲームオーバーの画面表示
-                // TODO:ハイスコアの場合は保存
-                // リスタートボタンが押されたらステートを"start"に変える
+                CallGameOver();
+                _gameState = GameState.WaitReplay;
                 break;
+            }
+
+            // リプレイ待ち
+            case GameState.WaitReplay:
+            {
+                    break;
             }
         }
     }
@@ -118,25 +126,34 @@ public class GameManager : MonoBehaviour
         _fruitParent = Instantiate(newFruitsObj, this.transform.position, Quaternion.identity);
         _fruitParent.transform.SetParent(this.transform);
         _spawnFruits.Initialization(_fruitParent);
+        _moveWall.InitializeWall();
+        _canFall = false;
+        _moveWall.SetCanFallFlag(true);
 
         // ゲーム開始
         _gameState = GameState.Set;
     }
 
-    // ゲームオーバーになったときの処理
-    public void CallGameOver()
-    {
-        ChangeViewCamera(true);
-        _gameState = GameState.GameOver;
-    }
-
     // フルーツを落とすことができるかどうかのフラグ
     public void SetFallFrag(bool canFall)
     {
-        if(_gameState == GameState.Fall)
+        if (_gameState == GameState.Fall)
         {
             _canFall = canFall;
         }
+    }
+
+    // ゲームオーバーになったときの処理
+    private void CallGameOver()
+    {
+        ChangeViewCamera(true);
+        _gameState = GameState.GameOver;
+        _cancelTokenSource.Cancel();
+        _gameOverText.SetActive(true);
+        _ReplayButton.SetActive(true);
+        _cancelTokenSource.Dispose();
+        _canFall = false;
+        _moveWall.SetCanFallFlag(false);
     }
 
     // カメラ切り替えのフラグ受け取り
@@ -150,11 +167,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         _gameState = GameState.GameOver;
-        _cancelTokenSource.Cancel();
-        _gameOverText.SetActive(true);
-        _ReplayButton.SetActive(true);
-        _cancelTokenSource.Dispose();
-        if(_nextFruit != null)
+        if (_nextFruit != null)
         {
             Destroy(_nextFruit);
             _nextFruit = null;

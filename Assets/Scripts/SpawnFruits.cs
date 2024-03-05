@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class SpawnFruits : MonoBehaviour
 {
+    [SerializeField] private MoveWall _moveWall;
     [SerializeField] private AudioSource _audioClip;
     [SerializeField] private AudioClip _FallSE;
     [SerializeField] private AudioClip _BombSE;
@@ -205,5 +206,13 @@ public class SpawnFruits : MonoBehaviour
     {
         _fruitParent = fruitsParent;
         _nextFruit = null;
+    }
+
+    public void SetCenterPosition()
+    {
+        if(_nextFruit != null)
+        {
+            _nextFruit.transform.position = k_firstCreatePosition;
+        }
     }
 }
