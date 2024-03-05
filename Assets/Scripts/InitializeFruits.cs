@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 public class InitializeFruits
 {
-    // ƒ}ƒeƒŠƒAƒ‹‚ÉƒAƒNƒZƒX‚é‚Æ‚«‚ÌƒpƒX
+    // ãƒãƒ†ãƒªã‚¢ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã‚‹ã¨ãã®ãƒ‘ã‚¹
     private readonly int fruitsSpecies = 11;
     private readonly string headMaterialPass = "Material_";
     private bool EndInitializeList = false;
@@ -16,7 +16,7 @@ public class InitializeFruits
     public async Task InitializeList()
     {
         if (EndInitializeList) return;
-        // ƒQ[ƒ€ŠJn‚É‘S‚Ä‚Ìƒtƒ‹[ƒc‚Ìƒf[ƒ^‚ğ‰Šú‰»
+        // ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«å…¨ã¦ã®ãƒ•ãƒ«ãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿ã‚’åˆæœŸåŒ–
         var cherry = new FruitsBase(GameManager.FruitsKinds.cherry, 20.0f, 5, "Cherry");
         fruitsBase.Add(cherry);
 
@@ -54,7 +54,7 @@ public class InitializeFruits
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚Ìƒ}ƒeƒŠƒAƒ‹‚ğæ“¾
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’å–å¾—
     /// </summary>
     /// <returns></returns>
     public async UniTask SetFruitsMaterial()
@@ -68,40 +68,40 @@ public class InitializeFruits
             bool complete = false;
             Material material = null;
 
-            // ƒ[ƒh‚·‚é
+            // ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
             Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
             {
                 if (handle.Result == null)
                 {
-                    Debug.LogError("ƒ}ƒeƒŠƒAƒ‹‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
+                    Debug.LogError("ãƒãƒ†ãƒªã‚¢ãƒ«ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
                     return;
                 }
                 material = handle.Result;
                 complete = true;
             };
 
-            // ƒ[ƒh‚ªŠ®—¹‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒ­ãƒ¼ãƒ‰ãŒå®Œäº†ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => complete == true);
             fruitsBase[i].SetMaterial(material);
         }
     }
 
-    // ƒtƒ‹[ƒc‚Ìƒ}ƒeƒŠƒAƒ‹‚ğ•Ô‚·
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’è¿”ã™
     public async UniTask<Material> GetFruitMaterial(int fruitNumber)
     {
         var fruitMaterial = fruitsBase[fruitNumber].fruitMaterial;
-        // ‚à‚µ‚Ü‚¾ƒ}ƒeƒŠƒAƒ‹‚ğƒZƒbƒg‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç‚±‚±‚Åƒ[ƒh‚µ‚Ä“n‚·
+        // ã‚‚ã—ã¾ã ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’ã‚»ãƒƒãƒˆã—ã¦ã„ãªã‹ã£ãŸã‚‰ã“ã“ã§ãƒ­ãƒ¼ãƒ‰ã—ã¦æ¸¡ã™
         if(fruitMaterial == null)
         {
             bool complete = false;
             string fruitMaterialPass = headMaterialPass + fruitsBase[fruitNumber].fruitName;
             Material material = null;
-            // ƒ[ƒh‚·‚é
+            // ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
             Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
             {
                 if (handle.Result == null)
                 {
-                    Debug.LogError(fruitsBase[fruitNumber].fruitName + " : ƒ}ƒeƒŠƒAƒ‹‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
+                    Debug.LogError(fruitsBase[fruitNumber].fruitName + " : ãƒãƒ†ãƒªã‚¢ãƒ«ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
                     return;
                 }
                 material = handle.Result;
@@ -111,12 +111,12 @@ public class InitializeFruits
             await UniTask.WaitUntil(() => complete == true);
             fruitMaterial = material;
         }
-        return fruitMaterial;                   // ‚»‚Ì‚Ü‚Ü"Unity.Material"‚ğ•Ô‚·‚±‚Æ‚ª‚Å‚«‚È‚¢B(async‚ğ•t‚¯‚Ä‚È‚¢‚Æ‚«)@
-        //return fruitMaterial as Material;       // 'UnityEngine.Material' ‚ğ 'Cysharp.Threading.Tasks.UniTask<UnityEngine.Material>' ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ
+        return fruitMaterial;                   // ãã®ã¾ã¾"Unity.Material"ã‚’è¿”ã™ã“ã¨ãŒã§ããªã„ã€‚(asyncã‚’ä»˜ã‘ã¦ãªã„ã¨ã)ã€€
+        //return fruitMaterial as Material;       // 'UnityEngine.Material' ã‚’ 'Cysharp.Threading.Tasks.UniTask<UnityEngine.Material>' ã«å¤‰æ›ã§ãã¾ã›ã‚“
 
         //return UniTask.FromResult(fruitMaterial);
     }
-    // ‚â‚Á‚Ä‚é‚±‚Æ‚Íª‚ÆˆêB•Ê‚Ì‘‚«•û
+    // ã‚„ã£ã¦ã‚‹ã“ã¨ã¯â†‘ã¨ä¸€ç·’ã€‚åˆ¥ã®æ›¸ãæ–¹
     //public UniTask<Material> GetFruitmaterial(GameManager.FruitsKinds fruitskinds)
     //{
     //    var fruitMaterial = fruitsBase[(int)fruitskinds].fruitMaterial;
@@ -124,12 +124,12 @@ public class InitializeFruits
     //    {
     //        return UniTask.FromResult(fruitMaterial);
     //    }
-    //    // Addressables.LoadAssetAsync<Material> ‚ÌŒ‹‰Ê‚ğ UniTask<Material> ‚É•ÏŠ·
+    //    // Addressables.LoadAssetAsync<Material> ã®çµæœã‚’ UniTask<Material> ã«å¤‰æ›
     //    return Addressables.LoadAssetAsync<Material>(fruitsBase[(int)fruitskinds].materialPass).ToUniTask().ContinueWith(material =>
     //    {
     //        if (material == null)
     //        {
-    //            Debug.LogError("ƒ}ƒeƒŠƒAƒ‹‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½");
+    //            Debug.LogError("ãƒãƒ†ãƒªã‚¢ãƒ«ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ");
     //            return null;
     //        }
     //        fruitMaterial = material;
@@ -139,7 +139,7 @@ public class InitializeFruits
     //}
 
     
-    // ƒtƒ‹[ƒc‚Ì—v‘f‘S•”“n‚·
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã®è¦ç´ å…¨éƒ¨æ¸¡ã™
     
     
     public FruitsBase GetFruitsBase(int fruitNumber)
@@ -148,7 +148,7 @@ public class InitializeFruits
     }
 
     /// <summary>
-    /// ƒŠƒXƒg‚Ì—v‘f‚ğ“n‚·
+    /// ãƒªã‚¹ãƒˆã®è¦ç´ ã‚’æ¸¡ã™
     /// </summary>
     /// <param name="fruitNumber"></param>
     /// <returns></returns>
@@ -163,7 +163,7 @@ public class InitializeFruits
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚Ìí—Ş‚ğ•Ô‚·
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç¨®é¡ã‚’è¿”ã™
     /// </summary>
     /// <param name="fruitNumber"></param>
     /// <returns></returns>
@@ -173,7 +173,7 @@ public class InitializeFruits
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚Ì”Ô†‚ğ•Ô‚·
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç•ªå·ã‚’è¿”ã™
     /// </summary>
     /// <param name="fruitNumber"></param>
     /// <returns></returns>

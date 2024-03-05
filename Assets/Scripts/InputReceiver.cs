@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class InputReceiver : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class InputReceiver : MonoBehaviour
 
     private void Update()
     {
-        // ¶ƒNƒŠƒbƒN ‚à‚µ‚­‚Í@ƒGƒ“ƒ^[ƒL[‚Åƒtƒ‹[ƒc‚ğ—‚Æ‚·
+        // å·¦ã‚¯ãƒªãƒƒã‚¯ ã‚‚ã—ãã¯ã€€ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã§ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™
         if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return)
             && !_isCoolTime)
         {
@@ -37,7 +37,7 @@ public class InputReceiver : MonoBehaviour
             }
         }
 
-        // wasd‚Åƒtƒ‹[ƒc‚ğ—‚Æ‚·‘O‚ÉˆÚ“®
+        // wasdã§ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™å‰ã«ç§»å‹•
         if(Input.GetKey(KeyCode.W))
         {
             _spawnFruit.MoveNextFruitPositionZ(false);
@@ -55,39 +55,39 @@ public class InputReceiver : MonoBehaviour
             _spawnFruit.MoveNextFruitPositionX(true);
         }
 
-        // C ‚ÅƒJƒƒ‰Ø‚è‘Ö‚¦
+        // C ã§ã‚«ãƒ¡ãƒ©åˆ‡ã‚Šæ›¿ãˆ
         if(Input.GetKeyDown(KeyCode.C))
         {
-            // ƒJƒƒ‰•\¦‚Ìƒtƒ‰ƒO‚ğ”½“]‚³‚¹‚é
+            // ã‚«ãƒ¡ãƒ©è¡¨ç¤ºã®ãƒ•ãƒ©ã‚°ã‚’åè»¢ã•ã›ã‚‹
             _isMainCameraView = _isMainCameraView ? false : true;
             _gameManager.ChangeViewCamera(_isMainCameraView);
         }
 
-        // ª ‚Å” ‚ÌX²‰ñ“]
+        // â†‘ ã§ç®±ã®Xè»¸å›è»¢
         if(Input.GetKey(KeyCode.UpArrow))
         {
             _moveWall.RotateWallX(true);
         }
 
-        // « ‚Å” ‚ÌX²‰ñ“]
+        // â†“ ã§ç®±ã®Xè»¸å›è»¢
         if (Input.GetKey(KeyCode.DownArrow))
         {
             _moveWall.RotateWallX(false);
         }
 
-        // ¨@‚Å” ‚ÌZ²‚ğ‰ñ“]
+        // â†’ã€€ã§ç®±ã®Zè»¸ã‚’å›è»¢
         if (Input.GetKey(KeyCode.RightArrow))
         {
             _moveWall.RotateWallZ(false);
         }
 
-        // ©@‚Å” ‚ÌZ²‚ğ‰ñ“]
+        // â†ã€€ã§ç®±ã®Zè»¸ã‚’å›è»¢
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             _moveWall.RotateWallZ(true);
         }
 
-        // ” ‚ğ—h‚ç‚·
+        // ç®±ã‚’æºã‚‰ã™
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             _moveWall.ShakeWalls();

@@ -1,5 +1,5 @@
-using Cysharp.Threading.Tasks;
-using System.Threading;  // cancellationTokenSource ‚ğg‚¤‚½‚ß‚É•K—v
+ï»¿using Cysharp.Threading.Tasks;
+using System.Threading;  // cancellationTokenSource ã‚’ä½¿ã†ãŸã‚ã«å¿…è¦
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     }
     private GameState _gameState = GameState.none;
 
-    // ”š‚ª¬‚³‚¢‚Ù‚¤‚ª¬‚³‚¢ƒtƒ‹[ƒc
+    // æ•°å­—ãŒå°ã•ã„ã»ã†ãŒå°ã•ã„ãƒ•ãƒ«ãƒ¼ãƒ„
     public enum FruitsKinds
     {
         cherry,
@@ -64,32 +64,32 @@ public class GameManager : MonoBehaviour
             case GameState.none:
                 break;
 
-            // ƒQ[ƒ€ŠJn‘O
+            // ã‚²ãƒ¼ãƒ é–‹å§‹å‰
             case GameState.Start:
             {
-                // ƒQ[ƒ€‚ğ‰Šú‰»‚·‚é
+                // ã‚²ãƒ¼ãƒ ã‚’åˆæœŸåŒ–ã™ã‚‹
                 InitializeGame();
                 break; 
             }
 
-            // ƒtƒ‹[ƒc‚ğƒZƒbƒg
+            // ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’ã‚»ãƒƒãƒˆ
             case GameState.Set:
             {
-                // ƒtƒ‹[ƒc‚ğƒZƒbƒg
+                // ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’ã‚»ãƒƒãƒˆ
                 _nextFruit = await _spawnFruits.SetNextFruit(_cancelToken);
                 _gameState = GameState.Fall;
                 break;
             }
 
-            // ‹Ê‚ğ—‚Æ‚·
+            // ç‰ã‚’è½ã¨ã™
             case GameState.Fall:
             {
-                // ƒtƒ‰ƒO‚ª true ‚É‚È‚é‚Ü‚Å‘Ò‹@
+                // ãƒ•ãƒ©ã‚°ãŒ true ã«ãªã‚‹ã¾ã§å¾…æ©Ÿ
                 if (!_canFall || _nextFruit == null) return;
                 _canFall = false;
                 await _spawnFruits.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;
-                // GameOver‚É‚È‚Á‚Ä‚¢‚é‰Â”\«‚ğƒ`ƒFƒbƒN
+                // GameOverã«ãªã£ã¦ã„ã‚‹å¯èƒ½æ€§ã‚’ãƒã‚§ãƒƒã‚¯
                 if (_gameState == GameState.Fall)
                 {
                     _gameState = GameState.Set;
@@ -97,16 +97,16 @@ public class GameManager : MonoBehaviour
                 break;
             }
 
-            // ƒQ[ƒ€ƒI[ƒo[
+            // ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
             case GameState.GameOver:
             {
-                // ƒQ[ƒ€ƒI[ƒo[‚Ì‰æ–Ê•\¦
+                // ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã®ç”»é¢è¡¨ç¤º
                 CallGameOver();
                 _gameState = GameState.WaitReplay;
                 break;
             }
 
-            // ƒŠƒvƒŒƒC‘Ò‚¿
+            // ãƒªãƒ—ãƒ¬ã‚¤å¾…ã¡
             case GameState.WaitReplay:
             {
                     break;
@@ -115,13 +115,13 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒQ[ƒ€‚Ì‰Šú‰»
+    /// ã‚²ãƒ¼ãƒ ã®åˆæœŸåŒ–
     /// </summary>
     private async void InitializeGame()
     {
         _cancelTokenSource = new CancellationTokenSource();
         _cancelToken = _cancelTokenSource.Token;
-        // ƒQ[ƒ€‚É•K—v‚ÈUI‚ğƒZƒbƒg‚·‚é
+        // ã‚²ãƒ¼ãƒ ã«å¿…è¦ãªUIã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         _scoreManager.IniciateScore();
         ChangeViewCamera(true);
         GameObject newFruitsObj = new GameObject();
@@ -132,12 +132,12 @@ public class GameManager : MonoBehaviour
         _canFall = false;
         _moveWall.SetCanFallFlag(true);
 
-        // ƒQ[ƒ€ŠJn
+        // ã‚²ãƒ¼ãƒ é–‹å§‹
         _gameState = GameState.Set;
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚ğ—‚Æ‚·‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
     /// </summary>
     /// <param name="canFall"></param>
     public void SetFallFrag(bool canFall)
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒQ[ƒ€ƒI[ƒo[‚É‚È‚Á‚½‚Æ‚«‚Ìˆ—
+    /// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã«ãªã£ãŸã¨ãã®å‡¦ç†
     /// </summary>
     private void CallGameOver()
     {
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒJƒƒ‰Ø‚è‘Ö‚¦‚Ìƒtƒ‰ƒOó‚¯æ‚è
+    /// ã‚«ãƒ¡ãƒ©åˆ‡ã‚Šæ›¿ãˆã®ãƒ•ãƒ©ã‚°å—ã‘å–ã‚Š
     /// </summary>
     /// <param name="isMainCamera"></param>
     public void ChangeViewCamera(bool isMainCamera)
@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒQ[ƒ€ƒI[ƒo[‚ğŒŸ’m
+    /// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã‚’æ¤œçŸ¥
     /// </summary>
     public void GameOver()
     {
@@ -188,7 +188,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// replay@ƒ{ƒ^ƒ“‚ª‚¨‚³‚ê‚½‚Æ‚«
+    /// replayã€€ãƒœã‚¿ãƒ³ãŒãŠã•ã‚ŒãŸã¨ã
     /// </summary>
     public void PushReplayButton()
     {

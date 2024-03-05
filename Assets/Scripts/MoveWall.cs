@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -8,7 +8,7 @@ public class MoveWall : MonoBehaviour
     private Tweener _shakeTweener;
     private Vector3 _firstPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
-    //TODO:’²®‚ªI‚í‚Á‚½‚ç[serializeField]‚ğŠO‚·
+    //TODO:èª¿æ•´ãŒçµ‚ã‚ã£ãŸã‚‰[serializeField]ã‚’å¤–ã™
     [SerializeField] private float duration = 0.5f;
     [SerializeField] private float strength = 10.0f;
     [SerializeField] private int vibrato = 10;
@@ -22,32 +22,32 @@ public class MoveWall : MonoBehaviour
     private bool _canMove = false;
 
     /// <summary>
-    /// ” ‚ğ—h‚ç‚·
+    /// ç®±ã‚’æºã‚‰ã™
     /// </summary>
     public void ShakeWalls()
     {
         if (!_canMove) return;
-        // ‘O‚Ìˆ—‚ªc‚Á‚Ä“ü‚ê‚Î‰ŠúˆÊ’u‚É–ß‚·
+        // å‰ã®å‡¦ç†ãŒæ®‹ã£ã¦å…¥ã‚Œã°åˆæœŸä½ç½®ã«æˆ»ã™
         if (_shakeTweener != null)
         {
             _shakeTweener.Kill();
             gameObject.transform.position = _firstPosition;
         }
 
-        // —h‚ç‚·
+        // æºã‚‰ã™
         _shakeTweener = this.transform.DOShakePosition(duration, strength, vibrato, randomness, fadeOut);
     }
 
     /// <summary>
-    /// ” ‚Ì‰ñ“]
+    /// ç®±ã®å›è»¢
     /// </summary>
     /// <param name="isright"></param>
     public void RotateWallX(bool isright)
     {
         if (!_canMove) return;
         float angle = _rotationSpeed * Time.deltaTime;
-        // TODO:Šp“x‚ğ’¼Úw’è‚·‚é‚Ì‚ğ«‚ß‚é
-        // •Ç‚Ì’†SÀ•W
+        // TODO:è§’åº¦ã‚’ç›´æ¥æŒ‡å®šã™ã‚‹ã®ã‚’è¾ã‚ã‚‹
+        // å£ã®ä¸­å¿ƒåº§æ¨™
         var wallPos = new Vector3(0,0,450);
         if (isright)
         {
@@ -80,8 +80,8 @@ public class MoveWall : MonoBehaviour
     {
         if (!_canMove) return;
         float angle = _rotationSpeed * Time.deltaTime;
-        // TODO:Šp“x‚ğ’¼Úw’è‚·‚é‚Ì‚ğ«‚ß‚é
-        // •Ç‚Ì’†SÀ•W
+        // TODO:è§’åº¦ã‚’ç›´æ¥æŒ‡å®šã™ã‚‹ã®ã‚’è¾ã‚ã‚‹
+        // å£ã®ä¸­å¿ƒåº§æ¨™
         var wallPos = new Vector3(0, 0, 450);
         if (isright)
         {
@@ -110,7 +110,7 @@ public class MoveWall : MonoBehaviour
     }
 
     /// <summary>
-    /// ” ‚ğ“®‚©‚¹‚é‚©‚Ìƒtƒ‰ƒO‚ğó‚¯æ‚é
+    /// ç®±ã‚’å‹•ã‹ã›ã‚‹ã‹ã®ãƒ•ãƒ©ã‚°ã‚’å—ã‘å–ã‚‹
     /// </summary>
     /// <param name="canMove"></param>
     public void SetCanFallFlag(bool canMove)
@@ -119,7 +119,7 @@ public class MoveWall : MonoBehaviour
     }
 
     /// <summary>
-    /// ” ‚ÌÀ•WAŠp“x‚Ì‰Šú‰»
+    /// ç®±ã®åº§æ¨™ã€è§’åº¦ã®åˆæœŸåŒ–
     /// </summary>
     public void InitializeWall()
     {

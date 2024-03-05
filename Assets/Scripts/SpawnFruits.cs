@@ -1,5 +1,5 @@
-using UnityEngine;
-using System.Threading;  // cancellationTokenSource ‚ğg‚¤‚½‚ß‚É•K—v
+ï»¿using UnityEngine;
+using System.Threading;  // cancellationTokenSource ã‚’ä½¿ã†ãŸã‚ã«å¿…è¦
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
@@ -18,7 +18,7 @@ public class SpawnFruits : MonoBehaviour
     private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 240.0f, 450.0f);
     private readonly Vector3 k_beforeExplosionSize = new Vector3(0.5f, 0.5f, 0.5f);
 
-    // null‹–—eŒ^@‰Šú‰»‚·‚é‚Æ‚«‚ànull‚É‚·‚é
+    // nullè¨±å®¹å‹ã€€åˆæœŸåŒ–ã™ã‚‹ã¨ãã‚‚nullã«ã™ã‚‹
     private Vector3? _fruits1Pos = null;
     private Vector3? _fruits2Pos = null;
     private Vector3? _HalfPoint = null;
@@ -39,7 +39,7 @@ public class SpawnFruits : MonoBehaviour
     }
 
     /// <summary>
-    /// Ÿ‚É—‚Æ‚·ƒtƒ‹[ƒc‚ğŒˆ‚ßA‰ŠúˆÊ’u‚ÉƒZƒbƒg
+    /// æ¬¡ã«è½ã¨ã™ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’æ±ºã‚ã€åˆæœŸä½ç½®ã«ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
@@ -47,41 +47,41 @@ public class SpawnFruits : MonoBehaviour
     {
         try
         {
-            // ‚Ü‚¾—‚Æ‚³‚ê‚Ä‚¢‚È‚¢ƒtƒ‹[ƒc‚ª‚ ‚Á‚½‚çreturn
+            // ã¾ã è½ã¨ã•ã‚Œã¦ã„ãªã„ãƒ•ãƒ«ãƒ¼ãƒ„ãŒã‚ã£ãŸã‚‰return
             if (_nextFruit != null || token.IsCancellationRequested) return null;
 
-            // ¶¬‘O‚É•K—v‚È‚à‚Ì‚ğæ“¾
+            // ç”Ÿæˆå‰ã«å¿…è¦ãªã‚‚ã®ã‚’å–å¾—
             int creatFruit;
             creatFruit = Random.Range(0, FIRST_CREATE_FRUIT_KINDS);
             Vector3 fruitsSize = await _initializeFruits.GetFruitSize(creatFruit);
-            // ƒ}ƒeƒŠƒAƒ‹æ“¾
+            // ãƒãƒ†ãƒªã‚¢ãƒ«å–å¾—
             var material = await _initializeFruits.GetFruitMaterial(creatFruit);
 
-            // ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ¶¬
+            // ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
             _nextFruit = Instantiate(_baseSphere, k_firstCreatePosition, Quaternion.identity);
 
-            // æ“¾‚µ‚½‚à‚Ì‚ğ”½‰f
+            // å–å¾—ã—ãŸã‚‚ã®ã‚’åæ˜ 
             _nextFruit.name = _initializeFruits.GetFruitName(creatFruit);
 
-            // ƒtƒ‹[ƒc‚Ìí—Ş‚ğ—^‚¦‚é
+            // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç¨®é¡ã‚’ä¸ãˆã‚‹
             var fruitKind = _initializeFruits.GetFruitKind(creatFruit);
             _nextFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitKind);
             _nextFruit.transform.localScale = fruitsSize;
             _nextFruit.GetComponent<MeshRenderer>().material = material;
 
-            // GameManager‚ÌqƒIƒuƒWƒFƒNƒg‚É‚·‚é
+            // GameManagerã®å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã™ã‚‹
             _nextFruit.transform.SetParent(_fruitParent.transform);
             return _nextFruit;
         }
         catch
         {
-            Debug.Log("¶¬ƒLƒƒƒ“ƒZƒ‹");
+            Debug.Log("ç”Ÿæˆã‚­ãƒ£ãƒ³ã‚»ãƒ«");
             return null;
         }
     }
 
     /// <summary>
-    /// Ÿ‚É—‚Æ‚·ƒtƒ‹[ƒc‚ğˆÚ“®‚³‚¹‚é
+    /// æ¬¡ã«è½ã¨ã™ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’ç§»å‹•ã•ã›ã‚‹
     /// </summary>
     /// <param name="isRight"></param>
     public void MoveNextFruitPositionX(bool isRight)
@@ -99,33 +99,33 @@ public class SpawnFruits : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚ğ—‚Æ‚·
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™
     /// </summary>
     public async UniTask FallFruit(GameObject fallFruit, CancellationToken token)
     {
         try
         {
-            // ƒLƒƒƒ“ƒZƒ‹‚Ì–½—ß‚ªo‚½‚çˆ—‚ğ‚³‚¹‚È‚¢
+            // ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã®å‘½ä»¤ãŒå‡ºãŸã‚‰å‡¦ç†ã‚’ã•ã›ãªã„
             if (fallFruit == null || token.IsCancellationRequested) return;
             _audioClip.PlayOneShot(_FallSE);
             Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
             rb.useGravity = true;
 
-            // —‚¿‚é‚Ì‚ª’x‚¢‚©‚çA—‚Æ‚·‚Æ‚«‚É‰º•ûŒü‚Ì—Í‚ğ‰Á‚¦‚é
+            // è½ã¡ã‚‹ã®ãŒé…ã„ã‹ã‚‰ã€è½ã¨ã™ã¨ãã«ä¸‹æ–¹å‘ã®åŠ›ã‚’åŠ ãˆã‚‹
             rb.AddForce(rb.mass * Vector3.down * 500.0f, ForceMode.Impulse);
             _nextFruit = null;
 
-            // —‚Æ‚µ‚½ƒtƒ‹[ƒc‚ªŸ‚Ìƒtƒ‹[ƒc‚Æ‚Ô‚Â‚©‚ç‚È‚¢‚æ‚¤‚É‘Ò‚Â
+            // è½ã¨ã—ãŸãƒ•ãƒ«ãƒ¼ãƒ„ãŒæ¬¡ã®ãƒ•ãƒ«ãƒ¼ãƒ„ã¨ã¶ã¤ã‹ã‚‰ãªã„ã‚ˆã†ã«å¾…ã¤
             await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
         }
         catch
         {
-            Debug.Log("—‚Æ‚·‚ÌƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½");
+            Debug.Log("è½ã¨ã™ã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸ");
         }
     }
 
     /// <summary>
-    /// “¯‚¶ƒtƒ‹[ƒc“¯m‚ª‚­‚Á‚Â‚¢‚½‚Æ‚«‚Éi‰»æ‚Ìƒtƒ‹[ƒc‚Ì¶¬’n“_‚ğ‹‚ß‚é
+    /// åŒã˜ãƒ•ãƒ«ãƒ¼ãƒ„åŒå£«ãŒãã£ã¤ã„ãŸã¨ãã«é€²åŒ–å…ˆã®ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç”Ÿæˆåœ°ç‚¹ã‚’æ±‚ã‚ã‚‹
     /// </summary>
     /// <param name="fruitsKinds"></param>
     /// <param name="fruitPosition"></param>
@@ -143,10 +143,10 @@ public class SpawnFruits : MonoBehaviour
         }
         else
         {
-            Debug.LogError("—¼•ûƒ|ƒWƒVƒ‡ƒ“‚ª–„‚Ü‚Á‚Ä‚¢‚Ü‚·");
+            Debug.LogError("ä¸¡æ–¹ãƒã‚¸ã‚·ãƒ§ãƒ³ãŒåŸ‹ã¾ã£ã¦ã„ã¾ã™");
         }
 
-        // —¼•û–„‚Ü‚Á‚½‚çƒtƒ‹[ƒc‚Ì¶¬ˆÊ’u‚ğ“n‚·
+        // ä¸¡æ–¹åŸ‹ã¾ã£ãŸã‚‰ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç”Ÿæˆä½ç½®ã‚’æ¸¡ã™
         if(_fruits1Pos != null 
             && _fruits2Pos != null
             && _fruitsKind1 == _fruitsKind2)
@@ -158,50 +158,50 @@ public class SpawnFruits : MonoBehaviour
     }
 
     /// <summary>
-    /// “¯‚¶ƒtƒ‹[ƒc“¯m‚ª‚­‚Á‚Â‚¢‚½‚Æ‚«‚Éi‰»‚³‚¹‚é
+    /// åŒã˜ãƒ•ãƒ«ãƒ¼ãƒ„åŒå£«ãŒãã£ã¤ã„ãŸã¨ãã«é€²åŒ–ã•ã›ã‚‹
     /// </summary>
-    /// <param name="beforeFruit"> i‰»‘O‚Ìƒtƒ‹[ƒc </param>
-    /// <param name="createPosition"> ¶¬Œã‚ÌˆÊ’u </param>
+    /// <param name="beforeFruit"> é€²åŒ–å‰ã®ãƒ•ãƒ«ãƒ¼ãƒ„ </param>
+    /// <param name="createPosition"> ç”Ÿæˆå¾Œã®ä½ç½® </param>
     public async void EvolutionFruit(GameManager.FruitsKinds beforeFruit, Vector3 createPosition)
     {
         int nextFruit = (int)beforeFruit + 1;
         var fruitBase = _initializeFruits.GetFruitsBase(nextFruit);
-        // ƒtƒ‹[ƒc‚ÌƒXƒRƒA‰ÁZ
+        // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ã‚¹ã‚³ã‚¢åŠ ç®—
         _scoreManager.AddScore(fruitBase.score);
 
-        // TODO:ƒXƒCƒJ‚ª2‚Â‚­‚Á‚Â‚¢‚½‚Æ‚«‚Ì‘Îˆ
+        // TODO:ã‚¹ã‚¤ã‚«ãŒ2ã¤ãã£ã¤ã„ãŸã¨ãã®å¯¾å‡¦
 
-        // ƒ}ƒeƒŠƒAƒ‹‚µ‚ã‚Æ‚­
+        // ãƒãƒ†ãƒªã‚¢ãƒ«ã—ã‚…ã¨ã
         var material = fruitBase.fruitMaterial;
 
-        // ¶¬
+        // ç”Ÿæˆ
         GameObject evolusionFruit = Instantiate(_baseSphere, createPosition, Quaternion.identity);
-        // ”š”­‰‰o‚ğì‚é‚½‚ß‚Ìk¬ƒTƒCƒYİ’è
+        // çˆ†ç™ºæ¼”å‡ºã‚’ä½œã‚‹ãŸã‚ã®ç¸®å°ã‚µã‚¤ã‚ºè¨­å®š
         evolusionFruit.transform.localScale = k_beforeExplosionSize;
 
-        // gameObject‚Ì–¼‘O‚ğƒtƒ‹[ƒc‚Ìí—Ş‚É‚·‚é
+        // gameObjectã®åå‰ã‚’ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç¨®é¡ã«ã™ã‚‹
         evolusionFruit.name = fruitBase.fruitName;
 
-        // ƒtƒ‹[ƒc‚Ìí—Ş‚ğ—^‚¦‚é
+        // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç¨®é¡ã‚’ä¸ãˆã‚‹
         evolusionFruit.GetComponent<CollisionFruit>().SetFruitKind(fruitBase.fruitsKinds);
         evolusionFruit.GetComponent<MeshRenderer>().material = material;
         evolusionFruit.GetComponent<Rigidbody>().useGravity = true;
 
-        // GameManager‚ÌqƒIƒuƒWƒFƒNƒg‚É‚·‚é
+        // GameManagerã®å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã™ã‚‹
         evolusionFruit.transform.SetParent(_fruitParent.transform);
 
-        // ˆê‹C‚Éƒtƒ‹[ƒc‚ğŒ³‚ÌƒTƒCƒY‚Ü‚ÅŠg‘å‚·‚é
+        // ä¸€æ°—ã«ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’å…ƒã®ã‚µã‚¤ã‚ºã¾ã§æ‹¡å¤§ã™ã‚‹
         float fruitsSize = fruitBase.fruitSize;
         Vector3 fruitSize = new Vector3(fruitsSize, fruitsSize, fruitsSize);
         evolusionFruit.transform.DOScale(fruitSize, 0.1f);
         _audioClip.PlayOneShot(_BombSE);
 
-        // g‚Á‚½•Ï”‚Ì‰Šú‰»
+        // ä½¿ã£ãŸå¤‰æ•°ã®åˆæœŸåŒ–
         Initiate();
     }
 
     /// <summary>
-    /// ‰Šú‰»—pŠÖ”
+    /// åˆæœŸåŒ–ç”¨é–¢æ•°
     /// </summary>
     private void Initiate()
     {
@@ -213,7 +213,7 @@ public class SpawnFruits : MonoBehaviour
     }
 
     /// <summary>
-    /// gameManager‚Åì¬‚³‚ê‚½ƒtƒ‹[ƒc‚ÌeƒIƒuƒWƒF‚ğ‚à‚ç‚¤
+    /// gameManagerã§ä½œæˆã•ã‚ŒãŸãƒ•ãƒ«ãƒ¼ãƒ„ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚’ã‚‚ã‚‰ã†
     /// </summary>
     /// <param name="fruitsParent"></param>
     public void Initialization(GameObject fruitsParent)
@@ -223,7 +223,7 @@ public class SpawnFruits : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚ÌeƒIƒuƒWƒFƒNƒg‚ğİ’è
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¨­å®š
     /// </summary>
     public void SetCenterPosition()
     {

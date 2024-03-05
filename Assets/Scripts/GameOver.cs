@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class GameOver : MonoBehaviour
 {
     [SerializeField] GameManager _gameManager;
 
-    // ƒRƒ‰ƒCƒ_[‚Éƒtƒ‹[ƒc‚ªG‚ê‚½uŠÔAƒQ[ƒ€ƒI[ƒo[
+    // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã«ãƒ•ãƒ«ãƒ¼ãƒ„ãŒè§¦ã‚ŒãŸç¬é–“ã€ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
     private void OnCollisionEnter(Collision collision)
     {
         var outFruit = collision.gameObject;

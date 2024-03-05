@@ -1,20 +1,20 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class FruitsBase
 {
-    // ƒtƒ‹[ƒc‚Ìí—Ş
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ç¨®é¡
     public GameManager.FruitsKinds fruitsKinds { get; private set; }
 
-    // ƒtƒ‹[ƒc‚ğŠg‘å‚µ‚½‚Æ‚«‚Ì‘å‚«‚³
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’æ‹¡å¤§ã—ãŸã¨ãã®å¤§ãã•
     public float fruitSize { get; private set; }
 
     // score
     public int score { get; private set; }
 
-    // ƒtƒ‹[ƒc‚Ì–¼‘O
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã®åå‰
     public string fruitName { get; private set; }
 
-    // ƒtƒ‹[ƒc‚Ìƒ}ƒeƒŠƒAƒ‹
+    // ãƒ•ãƒ«ãƒ¼ãƒ„ã®ãƒãƒ†ãƒªã‚¢ãƒ«
     public Material fruitMaterial { get; private set; } = null;
 
     public FruitsBase
