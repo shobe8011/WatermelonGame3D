@@ -114,7 +114,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ゲームの初期化
+    /// <summary>
+    /// ゲームの初期化
+    /// </summary>
     private async void InitializeGame()
     {
         _cancelTokenSource = new CancellationTokenSource();
@@ -134,7 +136,10 @@ public class GameManager : MonoBehaviour
         _gameState = GameState.Set;
     }
 
-    // フルーツを落とすことができるかどうかのフラグ
+    /// <summary>
+    /// フルーツを落とすことができるかどうかのフラグ
+    /// </summary>
+    /// <param name="canFall"></param>
     public void SetFallFrag(bool canFall)
     {
         if (_gameState == GameState.Fall)
@@ -143,7 +148,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ゲームオーバーになったときの処理
+    /// <summary>
+    /// ゲームオーバーになったときの処理
+    /// </summary>
     private void CallGameOver()
     {
         ChangeViewCamera(true);
@@ -156,14 +163,19 @@ public class GameManager : MonoBehaviour
         _moveWall.SetCanFallFlag(false);
     }
 
-    // カメラ切り替えのフラグ受け取り
+    /// <summary>
+    /// カメラ切り替えのフラグ受け取り
+    /// </summary>
+    /// <param name="isMainCamera"></param>
     public void ChangeViewCamera(bool isMainCamera)
     {
         _MainCamera.enabled = isMainCamera;
         _TopCamera.enabled = !isMainCamera;
     }
 
-    // ゲームオーバーを検知
+    /// <summary>
+    /// ゲームオーバーを検知
+    /// </summary>
     public void GameOver()
     {
         _gameState = GameState.GameOver;
@@ -175,7 +187,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("gameOver");
     }
 
-    // replay　ボタンがおされたとき
+    /// <summary>
+    /// replay　ボタンがおされたとき
+    /// </summary>
     public void PushReplayButton()
     {
         _gameOverText.SetActive(false);

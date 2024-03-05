@@ -53,11 +53,14 @@ public class InitializeFruits
         EndInitializeList = true;
     }
 
-    // フルーツのマテリアルを取得
+    /// <summary>
+    /// フルーツのマテリアルを取得
+    /// </summary>
+    /// <returns></returns>
     public async UniTask SetFruitsMaterial()
     {
         await InitializeList();
-        await UniTask.WaitUntil(() => EndInitializeList);       // フラグが立つまで待つ
+        await UniTask.WaitUntil(() => EndInitializeList);
 
         for (int i = 0; i < fruitsSpecies; i++)
         {
@@ -77,9 +80,9 @@ public class InitializeFruits
                 complete = true;
             };
 
+            // ロードが完了するまで待つ
             await UniTask.WaitUntil(() => complete == true);
             fruitsBase[i].SetMaterial(material);
-            //if (fruitsBase[i].fruitMaterial == null) Debug.LogError(fruitsBase[i].fruitName +" : マテリアルの取得に失敗しました。");
         }
     }
 
@@ -159,11 +162,21 @@ public class InitializeFruits
         return fruitSize;
     }
 
+    /// <summary>
+    /// フルーツの種類を返す
+    /// </summary>
+    /// <param name="fruitNumber"></param>
+    /// <returns></returns>
     public GameManager.FruitsKinds GetFruitKind(int fruitNumber)
     {
         return fruitsBase[fruitNumber].fruitsKinds;
     }
 
+    /// <summary>
+    /// フルーツの番号を返す
+    /// </summary>
+    /// <param name="fruitNumber"></param>
+    /// <returns></returns>
     public string GetFruitName(int fruitNumber)
     {
         return fruitsBase[fruitNumber].fruitName;

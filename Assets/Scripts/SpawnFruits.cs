@@ -38,7 +38,11 @@ public class SpawnFruits : MonoBehaviour
         var cts = new CancellationTokenSource();
     }
 
-    // 次に落とすフルーツを決め、初期位置にセット
+    /// <summary>
+    /// 次に落とすフルーツを決め、初期位置にセット
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public async UniTask<GameObject> SetNextFruit(CancellationToken token)
     {
         try
@@ -76,13 +80,15 @@ public class SpawnFruits : MonoBehaviour
         }
     }
 
-    // 次に落とすフルーツを移動させる
+    /// <summary>
+    /// 次に落とすフルーツを移動させる
+    /// </summary>
+    /// <param name="isRight"></param>
     public void MoveNextFruitPositionX(bool isRight)
     {
         if (_nextFruit == null) return;
         var moveLength = new Vector3(move, 0.0f, 0.0f);
         _nextFruit.transform.position += isRight ? moveLength : -moveLength;
-        // TODO: 移動制限を付ける
     }
 
     public void MoveNextFruitPositionZ(bool isfront)
@@ -90,7 +96,6 @@ public class SpawnFruits : MonoBehaviour
         if (_nextFruit == null) return;
         var moveLength = new Vector3(0.0f, 0.0f, move);
         _nextFruit.transform.position += isfront ? -moveLength : moveLength;
-        // TODO: 移動制限を付ける
     }
 
     /// <summary>
@@ -119,7 +124,11 @@ public class SpawnFruits : MonoBehaviour
         }
     }
 
-    // 同じフルーツ同士がくっついたときに進化先のフルーツの生成地点を求める
+    /// <summary>
+    /// 同じフルーツ同士がくっついたときに進化先のフルーツの生成地点を求める
+    /// </summary>
+    /// <param name="fruitsKinds"></param>
+    /// <param name="fruitPosition"></param>
     public void CalcurationHalfPoint(GameManager.FruitsKinds fruitsKinds, Vector3 fruitPosition)
     {
         if(_fruits1Pos == null)
@@ -191,7 +200,9 @@ public class SpawnFruits : MonoBehaviour
         Initiate();
     }
 
-    // 初期化用関数
+    /// <summary>
+    /// 初期化用関数
+    /// </summary>
     private void Initiate()
     {
         _fruits1Pos = null;
@@ -201,13 +212,19 @@ public class SpawnFruits : MonoBehaviour
         _fruitsKind2 = GameManager.FruitsKinds.none;
     }
 
-    // gameManagerで作成されたフルーツの親オブジェをもらう
+    /// <summary>
+    /// gameManagerで作成されたフルーツの親オブジェをもらう
+    /// </summary>
+    /// <param name="fruitsParent"></param>
     public void Initialization(GameObject fruitsParent)
     {
         _fruitParent = fruitsParent;
         _nextFruit = null;
     }
 
+    /// <summary>
+    /// フルーツの親オブジェクトを設定
+    /// </summary>
     public void SetCenterPosition()
     {
         if(_nextFruit != null)
