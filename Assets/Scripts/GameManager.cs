@@ -84,8 +84,17 @@ public class GameManager : MonoBehaviour
             // 玉を落とす
             case GameState.Fall:
             {
-                // フラグが true になるまで待機
-                if (!_canFall || _nextFruit == null) return;
+                if (_nextFruit == null)
+                {
+                    _gameState = GameState.Set;
+                    _canFall = false;
+                    return;
+                }
+                if (!_canFall)
+                {
+                    return;
+                }
+
                 _canFall = false;
                 await _spawnFruits.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;

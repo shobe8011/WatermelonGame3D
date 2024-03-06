@@ -10,7 +10,7 @@ public class InputReceiver : MonoBehaviour
 
     private bool _isMainCameraView = true;
     private bool _isCoolTime = false;
-    private float _clickCoolTime = 2.0f;
+    private float _clickCoolTime = 0.0f;
 
     private void Start()
     {
@@ -26,7 +26,7 @@ public class InputReceiver : MonoBehaviour
         {
             _isCoolTime = true;
             _gameManager.SetFallFrag(true);
-            _clickCoolTime = 2.0f;
+            _clickCoolTime = 1.0f;
         }
         else
         {

@@ -181,4 +181,14 @@ public class InitializeFruits
     {
         return fruitsBase[fruitNumber].fruitName;
     }
+
+    /// <summary>
+    /// 同じ種類のフルーツが当たったときのスコアを渡す
+    /// </summary>
+    /// <param name="fruitNumber"></param>
+    /// <returns></returns>
+    public int GetFruitScore(int fruitNumber)
+    {
+        return fruitsBase[fruitNumber].score;
+    }
 }

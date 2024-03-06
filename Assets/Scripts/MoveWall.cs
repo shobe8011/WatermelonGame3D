@@ -5,21 +5,23 @@ using DG.Tweening;
 
 public class MoveWall : MonoBehaviour
 {
-    private Tweener _shakeTweener;
     private Vector3 _firstPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    private bool _canMove = false;
 
-    //TODO:調整が終わったら[serializeField]を外す
-    [SerializeField] private float duration = 0.5f;
-    [SerializeField] private float strength = 10.0f;
-    [SerializeField] private int vibrato = 10;
-    [SerializeField] private float randomness = 45.0f;
-    [SerializeField] private bool fadeOut = true;
+    // 振動用変数
+    private Tweener _shakeTweener;
+    private float duration = 0.5f;
+    private float strength = 10.0f;
+    private int vibrato = 10;
+    private float randomness = 45.0f;
+    private bool fadeOut = true;
 
-    private readonly float MAX_rotate = 15.0f;
+    // 回転用変数
+    private readonly float MAX_rotate = 10.0f;
     private float _floatAngleX = 0.0f;
     private float _floatAngleZ = 0.0f;
-    private float _rotationSpeed = 45.0f;
-    private bool _canMove = false;
+    private float _rotationSpeed = 20.0f;
+
 
     /// <summary>
     /// 箱を揺らす
@@ -80,7 +82,7 @@ public class MoveWall : MonoBehaviour
     {
         if (!_canMove) return;
         float angle = _rotationSpeed * Time.deltaTime;
-        // TODO:角度を直接指定するのを辞める
+
         // 壁の中心座標
         var wallPos = new Vector3(0, 0, 450);
         if (isright)
