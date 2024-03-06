@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class InputReceiver : MonoBehaviour
 {
@@ -7,14 +7,10 @@ public class InputReceiver : MonoBehaviour
 
     private GameManager _gameManager = null;
     private SpawnFruits _spawnFruit = null;
-    private readonly float _kMaxRotate = 25.0f;
-    private readonly float _kMinimamRotate = -25.0f;
 
-    private float _xRotate = 0.0f;
     private bool _isMainCameraView = true;
     private bool _isCoolTime = false;
-    private float _clickCoolTime = 1.5f;
-    private float rotationSpeed = 45.0f;
+    private float _clickCoolTime = 0.0f;
 
     private void Start()
     {
@@ -24,13 +20,13 @@ public class InputReceiver : MonoBehaviour
 
     private void Update()
     {
-        // ¶ƒNƒŠƒbƒN ‚à‚µ‚­‚Í@ƒGƒ“ƒ^[ƒL[‚Åƒtƒ‹[ƒc‚ğ—‚Æ‚·
+        // å·¦ã‚¯ãƒªãƒƒã‚¯ ã‚‚ã—ãã¯ã€€ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã§ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™
         if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return)
             && !_isCoolTime)
         {
             _isCoolTime = true;
             _gameManager.SetFallFrag(true);
-            _clickCoolTime = 1.5f;
+            _clickCoolTime = 1.0f;
         }
         else
         {
@@ -41,7 +37,7 @@ public class InputReceiver : MonoBehaviour
             }
         }
 
-        // wasd‚Åƒtƒ‹[ƒc‚ğ—‚Æ‚·‘O‚ÉˆÚ“®
+        // wasdã§ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™å‰ã«ç§»å‹•
         if(Input.GetKey(KeyCode.W))
         {
             _spawnFruit.MoveNextFruitPositionZ(false);
@@ -59,108 +55,41 @@ public class InputReceiver : MonoBehaviour
             _spawnFruit.MoveNextFruitPositionX(true);
         }
 
-        // C ‚ÅƒJƒƒ‰Ø‚è‘Ö‚¦
+        // C ã§ã‚«ãƒ¡ãƒ©åˆ‡ã‚Šæ›¿ãˆ
         if(Input.GetKeyDown(KeyCode.C))
         {
-            // ƒJƒƒ‰•\¦‚Ìƒtƒ‰ƒO‚ğ”½“]‚³‚¹‚é
+            // ã‚«ãƒ¡ãƒ©è¡¨ç¤ºã®ãƒ•ãƒ©ã‚°ã‚’åè»¢ã•ã›ã‚‹
             _isMainCameraView = _isMainCameraView ? false : true;
             _gameManager.ChangeViewCamera(_isMainCameraView);
         }
 
-        // ª ‚Å” ‚ÌX²‰ñ“]
+        // â†‘ ã§ç®±ã®Xè»¸å›è»¢
         if(Input.GetKey(KeyCode.UpArrow))
         {
-            if(_xRotate < _kMaxRotate)
-            {
-                //var beforePosition = _wall.transform.position;
-                //var moveLength = new Vector3(0.0f, 3.0f, 1.0f);
-                //var rotation = Quaternion.Euler(new Vector3(30, 0, 0));
-                //var scale = Vector3.one;
-
-                //@s—ñ
-                //var matrix = Matrix4x4.TRS(moveLength, rotation, scale);
-
-                // •ÏŠ·‘O‚ÌÀ•W‚És—ñ‚ğ‚©‚¯‚é
-                //beforePosition = matrix.MultiplyPoint(beforePosition);
-                //beforeRotate = matrix.MultiplyPoint(beforeRotate);
-
-                //_xRotate += 1.0f;
-                float angle = rotationSpeed * Time.deltaTime;
-                //_wall.transform.position = beforePosition;
-                _wall.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.left);
-
-                // ˆÚ“®—Ê‚ÌŒvZ
-                Matrix4x4 matrix = _wall.transform.localToWorldMatrix;
-                // ˆÚ“®Œã‚ÌÀ•W
-                var rightVector = new Vector3();
-                rightVector.x = matrix.m30;
-                rightVector.y = matrix.m31;
-                rightVector.z = matrix.m32;
-                _wall.transform.position = rightVector;
-                Debug.Log(rightVector);
-
-                //_wall.transform.rotation = Quaternion.Euler(_xRotate, 0.0f, 0.0f);
-                //foreach (Transform wall in _wall.GetComponentInChildren<Transform>())
-                //{
-                //    //var rotationX = wall.eulerAngles.x;
-                //    //Debug.Log(wall.name + rotationX);
-                //    //rotationX += 0.01f;
-                //    //rotation.x += _xRotate;
-                //    //wall.rotation = Quaternion.Euler(rotationX, 0.0f, 0.0f);
-                //    Quaternion rot = Quaternion.AngleAxis(0.5f, Vector3.right);
-                //    wall.rotation *= rot;
-                //}
-            }
+            _moveWall.RotateWallX(true);
         }
 
-        // « ‚Å” ‚ÌX²‰ñ“]
+        // â†“ ã§ç®±ã®Xè»¸å›è»¢
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            // •Ç‚Ìs—ñ‚ğæ“¾ (
-            //Matrix4x4 matrix = _wall.transform.localToWorldMatrix;
-            if (_xRotate > _kMinimamRotate)
-            {
-                //_xRotate -= 1.0f;
-                float angle = rotationSpeed * Time.deltaTime;
-                _wall.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.right);
-
-
-                //_wall.transform.rotation = Quaternion.Euler(_xRotate, 0.0f, 0.0f);
-                //foreach (Transform wall in _wall.GetComponentInChildren<Transform>())
-                //{
-                //    //var rotationX = wall.eulerAngles.x;
-                //    //Debug.Log(wall.name + rotationX);
-                //    //rotationX += 0.01f;
-                //    //rotation.x += _xRotate;
-                //    //wall.rotation = Quaternion.Euler(rotationX, 0.0f, 0.0f);
-                //    Quaternion rot = Quaternion.AngleAxis(0.5f, Vector3.left);
-                //    wall.rotation *= rot;
-                //}
-            }
+            _moveWall.RotateWallX(false);
         }
 
-        // ¨@‚Å” ‚ÌZ²‚ğ‰ñ“]
+        // â†’ã€€ã§ç®±ã®Zè»¸ã‚’å›è»¢
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            var rotate = _wall.transform.rotation.z;
-            if (rotate < _kMaxRotate)
-            {
-                float angle = rotationSpeed * Time.deltaTime;
-                _wall.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.back);
-            }
+            _moveWall.RotateWallZ(false);
         }
 
-        // ©@‚Å” ‚ÌZ²‚ğ‰ñ“]
+        // â†ã€€ã§ç®±ã®Zè»¸ã‚’å›è»¢
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            float angle = rotationSpeed * Time.deltaTime;
-            _wall.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.forward);
+            _moveWall.RotateWallZ(true);
         }
 
-        // ” ‚ğ—h‚ç‚·
+        // ç®±ã‚’æºã‚‰ã™
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            //var moveWall = new MoveWall();
             _moveWall.ShakeWalls();
         }
     }
