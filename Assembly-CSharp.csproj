@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CollisionFruit.cs" />
+    <Compile Include="Assets\Scripts\FruitsMoveRestrictions.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\InputReceiver.cs" />
     <Compile Include="Assets\Scripts\GameOver.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="Assets\Scripts\MoveWall.cs" />
     <Compile Include="Assets\Scripts\InitializeFruits.cs" />
     <Compile Include="Assets\Scripts\SpawnFruits.cs" />
-    <Compile Include="Assets\Scripts\FruitsMoveRestrictions.cs" />
+    <Compile Include="Assets\Scripts\UIViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

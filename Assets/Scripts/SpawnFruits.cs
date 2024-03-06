@@ -15,7 +15,7 @@ public class SpawnFruits : MonoBehaviour
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
 
     private readonly int FIRST_CREATE_FRUIT_KINDS = 4;
-    private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 200.0f, 450.0f);
+    private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 275.0f, 450.0f);
     private readonly Vector3 k_beforeExplosionSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     // null許容型　初期化するときもnullにする

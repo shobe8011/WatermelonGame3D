@@ -6,7 +6,7 @@ using DG.Tweening;
 public class MoveWall : MonoBehaviour
 {
     private Vector3 _firstPosition = new Vector3(0.0f, 0.0f, 0.0f);
-    private bool _canMove = false;
+    private bool _canMove = true;
 
     // 振動用変数
     private Tweener _shakeTweener;
@@ -29,6 +29,9 @@ public class MoveWall : MonoBehaviour
     public void ShakeWalls()
     {
         if (!_canMove) return;
+        // 揺らしている間に座標が変わらないように、一時的にフラグを変える
+        _canMove = false;
+        _firstPosition = this.transform.position;
         // 前の処理が残って入れば初期位置に戻す
         if (_shakeTweener != null)
         {
@@ -38,6 +41,7 @@ public class MoveWall : MonoBehaviour
 
         // 揺らす
         _shakeTweener = this.transform.DOShakePosition(duration, strength, vibrato, randomness, fadeOut);
+        _canMove = true;
     }
 
     /// <summary>

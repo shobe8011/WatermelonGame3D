@@ -1,19 +1,18 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Threading;  // cancellationTokenSource を使うために必要
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private enum GameState
+    public enum GameState
     {
-        none,
         Start,
         Set,
         Fall,
         GameOver,
         WaitReplay,
     }
-    private GameState _gameState = GameState.none;
+    private GameState _gameState = GameState.WaitReplay;
 
     // 数字が小さいほうが小さいフルーツ
     public enum FruitsKinds
@@ -35,8 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MoveWall _moveWall;
     [SerializeField] private Camera _MainCamera;
     [SerializeField] private Camera _TopCamera;
-    [SerializeField] private GameObject _gameOverText;
-    [SerializeField] private GameObject _ReplayButton;
+    [SerializeField] private UIViewer _UIViewer;
 
     private CancellationTokenSource _cancelTokenSource;
     private CancellationToken _cancelToken;
@@ -45,6 +43,7 @@ public class GameManager : MonoBehaviour
     private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
     private GameObject _fruitParent = null;
+    private bool _canChangeCamera = false;
     private bool _canFall = false;
 
     async void Start()
@@ -53,7 +52,9 @@ public class GameManager : MonoBehaviour
         _scoreManager = GetComponent<ScoreManager>();
         await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
-        _gameState = GameState.Start;
+        // ゲーム開始前のUI表示
+        _UIViewer.SetBeforeGameStart();
+        _gameState = GameState.WaitReplay;
     }
 
     // Update is called once per frame
@@ -61,15 +62,13 @@ public class GameManager : MonoBehaviour
     {
         switch(_gameState)
         {
-            case GameState.none:
-                break;
-
-            // ゲーム開始前
             case GameState.Start:
             {
-                // ゲームを初期化する
-                InitializeGame();
-                break; 
+                    // ゲームを初期化する
+                    await InitializeGame();
+                    // ゲーム開始
+                    _gameState = GameState.Set;
+                    break;
             }
 
             // フルーツをセット
@@ -126,23 +125,30 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームの初期化
     /// </summary>
-    private async void InitializeGame()
+    private async Task InitializeGame()
     {
+        // UniTaskのキャンセルフラグ初期化
         _cancelTokenSource = new CancellationTokenSource();
         _cancelToken = _cancelTokenSource.Token;
+
         // ゲームに必要なUIをセットする
+        _UIViewer.SetDuringGame();
         _scoreManager.IniciateScore();
         ChangeViewCamera(true);
+
+        // フルールの親オブジェクトをつくる
         GameObject newFruitsObj = new GameObject();
         _fruitParent = Instantiate(newFruitsObj, this.transform.position, Quaternion.identity);
         _fruitParent.transform.SetParent(this.transform);
         _spawnFruits.Initialization(_fruitParent);
-        _moveWall.InitializeWall();
-        _canFall = false;
-        _moveWall.SetCanFallFlag(true);
 
-        // ゲーム開始
-        _gameState = GameState.Set;
+        // ゲーム開始前にタイトル画面で動かせる箱の初期化
+        _moveWall.InitializeWall();
+
+        // フラグの初期化
+        _canFall = false;
+        _canChangeCamera = true;
+        _moveWall.SetCanFallFlag(true);
     }
 
     /// <summary>
@@ -165,10 +171,9 @@ public class GameManager : MonoBehaviour
         ChangeViewCamera(true);
         _gameState = GameState.GameOver;
         _cancelTokenSource.Cancel();
-        _gameOverText.SetActive(true);
-        _ReplayButton.SetActive(true);
+        _UIViewer.SetGameOver();
         _cancelTokenSource.Dispose();
-        _canFall = false;
+        _canFall = _canChangeCamera = false;
         _moveWall.SetCanFallFlag(false);
     }
 
@@ -178,8 +183,14 @@ public class GameManager : MonoBehaviour
     /// <param name="isMainCamera"></param>
     public void ChangeViewCamera(bool isMainCamera)
     {
+        if (!_canChangeCamera) return;
         _MainCamera.enabled = isMainCamera;
         _TopCamera.enabled = !isMainCamera;
+    }
+
+    public void CallGameStart()
+    {
+        _gameState = GameState.Start;
     }
 
     /// <summary>
@@ -201,8 +212,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PushReplayButton()
     {
-        _gameOverText.SetActive(false);
-        _ReplayButton.SetActive(false);
+        _UIViewer.SetDuringGame();
         Destroy(_fruitParent);
         _gameState = GameState.Start;
     }

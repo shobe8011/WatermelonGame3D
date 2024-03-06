@@ -9,6 +9,6 @@ public class GameOver : MonoBehaviour
     {
         var outFruit = collision.gameObject;
         _gameManager.GameOver();
-        Destroy(outFruit, 1.0f);
+        Destroy(outFruit, 0.5f);
     }
 }
