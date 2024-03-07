@@ -53,8 +53,6 @@ public class GameManager : MonoBehaviour
         _scoreManager = GetComponent<ScoreManager>();
         await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
-        // ゲーム開始前のUI表示
-        _UIViewer.SetBeforeGameStart();
         _gameState = GameState.WaitReplay;
     }
 

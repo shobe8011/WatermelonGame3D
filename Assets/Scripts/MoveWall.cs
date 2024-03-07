@@ -52,7 +52,6 @@ public class MoveWall : MonoBehaviour
     {
         if (!_canMove) return;
         float angle = _rotationSpeed * Time.deltaTime;
-        // TODO:角度を直接指定するのを辞める
         // 壁の中心座標
         var wallPos = new Vector3(0,0,450);
         if (isright)

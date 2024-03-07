@@ -1,39 +1,21 @@
-using UnityEngine;
-using TMPro;
+ï»¿using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] UIViewer _UIViewer;
     private int _score { get; set; } = 0;
-    private int _highScore = 0;
 
-    private string _scoreKey = "HighScore";
-
-    public void SetHighScore()
-    {
-        _highScore = PlayerPrefs.GetInt(_scoreKey);
-    }
-
-    // ƒXƒRƒA‚ğ‰Šú‰»
+    // ã‚¹ã‚³ã‚¢ã‚’åˆæœŸåŒ–
     public void IniciateScore()
     {
         _score = 0;
         _UIViewer.SetScore(_score);
     }
 
-    // ƒXƒRƒA‚ğ‰ÁZ
+    // ã‚¹ã‚³ã‚¢ã‚’åŠ ç®—
     public void AddScore(int getScore)
     {
         _score += getScore;
         _UIViewer.SetScore(_score);
-    }
-
-    // TODO: ‰ß‹‚ÌÅ‚ƒXƒRƒA‚Æ”äŠr‚·‚é
-    public void CheckHighScore()
-    {
-        if(_highScore < _score)
-        {
-            PlayerPrefs.SetInt(_scoreKey, _highScore);
-        }
     }
 }

@@ -19,31 +19,37 @@ public class UIViewer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _frontScoreViewer;
     [SerializeField] private TextMeshProUGUI _topScoreViewer;
 
-    private bool _canGameStart = false;
-
-    public void SetBeforeGameStart()
-    {
-        SetBeforeGameTextUI(true);
-        _canGameStart = true;
-    }
-
+    /// <summary>
+    /// ゲーム中の不要なUIは消す
+    /// </summary>
     public void SetDuringGame()
     {
         SetBeforeGameTextUI(false);
         SetGameOverUI(false);
     }
 
+    /// <summary>
+    /// ゲームオーバーの表示を出す
+    /// </summary>
     public void SetGameOver()
     {
         SetGameOverUI(true);
     }
 
+    /// <summary>
+    /// スコア表示更新
+    /// </summary>
+    /// <param name="score"></param>
     public void SetScore(int score)
     {
         _frontScoreViewer.text = "score:" + score;
         _topScoreViewer.text = "score:" + score;
     }
 
+    /// <summary>
+    /// ゲーム開始前に出ているUIの表示の切り替え
+    /// </summary>
+    /// <param name="isBefore"></param>
     private void SetBeforeGameTextUI(bool isBefore)
     {
         _titleText.SetActive(isBefore);
@@ -61,6 +67,9 @@ public class UIViewer : MonoBehaviour
         _ReplayButton.SetActive(isGameOver);
     }
 
+    /// <summary>
+    /// ボタンが押されたときの処理
+    /// </summary>
     public void PushGameStartButton()
     {
         SetDuringGame();
