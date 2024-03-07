@@ -19,10 +19,12 @@ public class UIViewer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _frontScoreViewer;
     [SerializeField] private TextMeshProUGUI _topScoreViewer;
 
+    private bool _canGameStart = false;
 
     public void SetBeforeGameStart()
     {
         SetBeforeGameTextUI(true);
+        _canGameStart = true;
     }
 
     public void SetDuringGame()
