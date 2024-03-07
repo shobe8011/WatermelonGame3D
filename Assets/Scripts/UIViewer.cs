@@ -64,4 +64,9 @@ public class UIViewer : MonoBehaviour
         SetDuringGame();
         _gameManager.CallGameStart();
     }
+    public void PushReplayButton()
+    {
+        _gameManager.Replay();
+    }
+
 }

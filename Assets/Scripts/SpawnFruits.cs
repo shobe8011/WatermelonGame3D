@@ -9,7 +9,7 @@ public class SpawnFruits : MonoBehaviour
     [SerializeField] private AudioSource _audioClip;
     [SerializeField] private AudioClip _FallSE;
     [SerializeField] private AudioClip _BombSE;
-    [SerializeField] private float move = 3.0f;
+    private float move = 1.0f;
     private GameManager _gameManager = null;
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;

@@ -46,14 +46,14 @@ public class GameManager : MonoBehaviour
     private bool _canChangeCamera = false;
     private bool _canFall = false;
 
-    async void Start()
+    async void Awake()
     {
         _spawnFruits = GetComponent<SpawnFruits>();
         _scoreManager = GetComponent<ScoreManager>();
         await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
         // ゲーム開始前のUI表示
-        _UIViewer.SetBeforeGameStart();
+        //_UIViewer.SetBeforeGameStart();
         _gameState = GameState.WaitReplay;
     }
 
@@ -137,6 +137,10 @@ public class GameManager : MonoBehaviour
         ChangeViewCamera(true);
 
         // フルールの親オブジェクトをつくる
+        if(_fruitParent != null)
+        {
+            Destroy(_fruitParent);
+        }
         GameObject newFruitsObj = new GameObject();
         _fruitParent = Instantiate(newFruitsObj, this.transform.position, Quaternion.identity);
         _fruitParent.transform.SetParent(this.transform);
@@ -210,10 +214,8 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// replay　ボタンがおされたとき
     /// </summary>
-    public void PushReplayButton()
+    public void Replay()
     {
-        _UIViewer.SetDuringGame();
-        Destroy(_fruitParent);
         _gameState = GameState.Start;
     }
 }

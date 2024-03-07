@@ -1183,8 +1183,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1374690040}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1828982761}
+        m_TargetAssemblyTypeName: UIViewer, Assembly-CSharp
         m_MethodName: PushReplayButton
         m_Mode: 1
         m_Arguments:
