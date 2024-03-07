@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\MoveWall.cs" />
     <Compile Include="Assets\Scripts\InitializeFruits.cs" />
     <Compile Include="Assets\Scripts\SpawnFruits.cs" />
+    <Compile Include="Assets\Scripts\MoveFruit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

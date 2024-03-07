@@ -5,12 +5,13 @@ using DG.Tweening;
 
 public class SpawnFruits : MonoBehaviour
 {
-    [SerializeField] private MoveWall _moveWall;
     [SerializeField] private AudioSource _audioClip;
     [SerializeField] private AudioClip _FallSE;
     [SerializeField] private AudioClip _BombSE;
-    private float move = 1.0f;
     private GameManager _gameManager = null;
+    private MoveFruit _moveFruit = null;
+
+
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
 
@@ -33,6 +34,7 @@ public class SpawnFruits : MonoBehaviour
     {
         _gameManager = GetComponent<GameManager>();
         _scoreManager = GetComponent<ScoreManager>();
+        _moveFruit = GetComponent<MoveFruit>();
         _initializeFruits = _gameManager._initializeFruits;
 
         var cts = new CancellationTokenSource();
@@ -72,6 +74,7 @@ public class SpawnFruits : MonoBehaviour
 
             // GameManagerの子オブジェクトにする
             _nextFruit.transform.SetParent(_fruitParent.transform);
+            _moveFruit.SetFallFruit(_nextFruit);
             return _nextFruit;
         }
         catch
@@ -79,24 +82,6 @@ public class SpawnFruits : MonoBehaviour
             Debug.Log("生成キャンセル");
             return null;
         }
-    }
-
-    /// <summary>
-    /// 次に落とすフルーツを移動させる
-    /// </summary>
-    /// <param name="isRight"></param>
-    public void MoveNextFruitPositionX(bool isRight)
-    {
-        if (_nextFruit == null) return;
-        var moveLength = new Vector3(move, 0.0f, 0.0f);
-        _nextFruit.transform.position += isRight ? moveLength : -moveLength;
-    }
-
-    public void MoveNextFruitPositionZ(bool isfront)
-    {
-        if (_nextFruit == null) return;
-        var moveLength = new Vector3(0.0f, 0.0f, move);
-        _nextFruit.transform.position += isfront ? -moveLength : moveLength;
     }
 
     /// <summary>
@@ -115,6 +100,7 @@ public class SpawnFruits : MonoBehaviour
             // 落ちるのが遅いから、落とすときに下方向の力を加える
             rb.AddForce(rb.mass * Vector3.down * 500.0f, ForceMode.Impulse);
             _nextFruit = null;
+            _moveFruit.SetFallFruit(null);
 
             // 落としたフルーツが次のフルーツとぶつからないように待つ
             await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));

@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     private bool _canChangeCamera = false;
     private bool _canFall = false;
 
+
+
     async void Awake()
     {
         _spawnFruits = GetComponent<SpawnFruits>();
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
         await _initializeFruits.SetFruitsMaterial();
         _gameState = GameState.WaitReplay;
     }
+
 
     // Update is called once per frame
     async void Update()

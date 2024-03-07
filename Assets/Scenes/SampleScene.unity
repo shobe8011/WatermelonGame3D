@@ -3206,6 +3206,7 @@ GameObject:
   - component: {fileID: 1374690041}
   - component: {fileID: 1374690042}
   - component: {fileID: 1374690043}
+  - component: {fileID: 1374690044}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3253,7 +3254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbad9ab82dae0ca41ba17eeedaf40ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveWall: {fileID: 584766287}
   _audioClip: {fileID: 1374690043}
   _FallSE: {fileID: 8300000, guid: 5efde9502ecc1a84189f5919fe909edb, type: 3}
   _BombSE: {fileID: 8300000, guid: 922504879c39cf9419c865c29c37d123, type: 3}
@@ -3480,6 +3480,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1374690044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374690036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8cdbf88ff638144aacac207816059c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1405613137
 GameObject:
   m_ObjectHideFlags: 0
