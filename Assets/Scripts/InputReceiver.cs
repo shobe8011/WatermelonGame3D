@@ -6,7 +6,7 @@ public class InputReceiver : MonoBehaviour
     [SerializeField] MoveWall _moveWall;
 
     private GameManager _gameManager = null;
-    private SpawnFruits _spawnFruit = null;
+    private MoveFruit _moveFruit = null;
 
     private bool _isMainCameraView = true;
     private bool _isCoolTime = false;
@@ -15,7 +15,7 @@ public class InputReceiver : MonoBehaviour
     private void Start()
     {
         _gameManager = GetComponent<GameManager>();
-        _spawnFruit = GetComponent<SpawnFruits>();
+        _moveFruit = GetComponent<MoveFruit>();
     }
 
     private void Update()
@@ -40,19 +40,19 @@ public class InputReceiver : MonoBehaviour
         // wasdでフルーツを落とす前に移動
         if(Input.GetKey(KeyCode.W))
         {
-            _spawnFruit.MoveNextFruitPositionZ(false);
+            _moveFruit.MoveNextFruitPositionZ(false);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            _spawnFruit.MoveNextFruitPositionX(false);
+            _moveFruit.MoveNextFruitPositionX(false);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            _spawnFruit.MoveNextFruitPositionZ(true);
+            _moveFruit.MoveNextFruitPositionZ(true);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            _spawnFruit.MoveNextFruitPositionX(true);
+            _moveFruit.MoveNextFruitPositionX(true);
         }
 
         // C でカメラ切り替え

@@ -1,24 +1,21 @@
-using UnityEngine;
-using TMPro;
+ï»¿using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _scoreViewer;
+    [SerializeField] UIViewer _UIViewer;
     private int _score { get; set; } = 0;
 
-    // ƒXƒRƒA‚ğ‰Šú‰»
+    // ã‚¹ã‚³ã‚¢ã‚’åˆæœŸåŒ–
     public void IniciateScore()
     {
         _score = 0;
-        _scoreViewer.text = "score:" + _score;
+        _UIViewer.SetScore(_score);
     }
 
-    // ƒXƒRƒA‚ğ‰ÁZ
+    // ã‚¹ã‚³ã‚¢ã‚’åŠ ç®—
     public void AddScore(int getScore)
     {
         _score += getScore;
-        _scoreViewer.text = "score:" + _score;
+        _UIViewer.SetScore(_score);
     }
-
-    // TODO: ‰ß‹‚ÌÅ‚ƒXƒRƒA‚Æ”äŠr‚·‚é
 }
