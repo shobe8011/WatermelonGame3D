@@ -49,8 +49,7 @@ public class SpawnFruits : MonoBehaviour
     {
         try
         {
-            if (!_canCreateFruit && token.IsCancellationRequested) return null;
-            _canCreateFruit = true;
+            if (!_canCreateFruit || token.IsCancellationRequested) return null;
 
             // 生成前に必要なものを取得
             int creatFruit;
@@ -74,6 +73,7 @@ public class SpawnFruits : MonoBehaviour
             // GameManagerの子オブジェクトにする
             _nextFruit.transform.SetParent(_fruitParent.transform);
             _moveFruit.SetFallFruit(_nextFruit);
+            _canCreateFruit = false;
             return _nextFruit;
         }
         catch

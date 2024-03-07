@@ -22,6 +22,7 @@ public class GameOver : MonoBehaviour
         else
         {
             _coolTime -= Time.deltaTime;
+            this.gameObject.SetActive(false);
             if (_coolTime <= 0)
             {
                 _canActive = true;
@@ -30,15 +31,15 @@ public class GameOver : MonoBehaviour
         }
     }
 
-    public void SetGameOverFlag(bool isGameOver)
+    public void SetGameOverFlag(bool canActiveFlag)
     {
         if (_canActive)
         {
-            this.gameObject.SetActive(isGameOver);
+            //this.gameObject.SetActive(canActiveFlag);
         }
         else
         {
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
     }
 }
