@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     private CancellationTokenSource _cancelTokenSource;
     private CancellationToken _cancelToken;
     private SpawnFruits _spawnFruits = null;
+    private MoveFruit _moveFruit = null;
     public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
     private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
@@ -51,11 +52,12 @@ public class GameManager : MonoBehaviour
 
     async void Awake()
     {
+        Application.targetFrameRate = 30;
         _spawnFruits = GetComponent<SpawnFruits>();
         _scoreManager = GetComponent<ScoreManager>();
+        _moveFruit = GetComponent<MoveFruit>();
         await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
-        _gameState = GameState.WaitReplay;
     }
 
 
@@ -99,7 +101,7 @@ public class GameManager : MonoBehaviour
 
                 _canFall = false;
                 _gameOver.SetGameOverFlag(false);
-                await _spawnFruits.FallFruit(_nextFruit, _cancelToken);
+                await _moveFruit.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;
                 // GameOverになっている可能性をチェック
                 if (_gameState == GameState.Fall)
@@ -212,7 +214,6 @@ public class GameManager : MonoBehaviour
             Destroy(_nextFruit);
             _nextFruit = null;
         }
-        Debug.Log("gameOver");
     }
 
     /// <summary>

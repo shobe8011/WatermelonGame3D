@@ -1,9 +1,22 @@
 using UnityEngine;
+using System.Threading;  // cancellationTokenSource を使うために必要
+using Cysharp.Threading.Tasks;
 
 public class MoveFruit : MonoBehaviour
 {
-    private GameObject _fallFruit = null;
+
+    [SerializeField] private AudioSource _audioClip;
+    [SerializeField] private AudioClip _FallSE;
+
+    private SpawnFruits _spawnFruits = null;
+    private GameObject _setFruit = null;
     private float _moveSpeed = 1.0f;
+    private float _fallPower = 500.0f;
+
+    private void Awake()
+    {
+        _spawnFruits = GetComponent<SpawnFruits>();
+    }
 
 
     /// <summary>
@@ -12,20 +25,49 @@ public class MoveFruit : MonoBehaviour
     /// <param name="isRight"></param>
     public void MoveNextFruitPositionX(bool isRight)
     {
-        if (_fallFruit == null) return;
+        if (_setFruit == null) return;
         var moveLength = new Vector3(_moveSpeed, 0.0f, 0.0f);
-        _fallFruit.transform.position += isRight ? moveLength : -moveLength;
+        _setFruit.transform.position += isRight ? moveLength : -moveLength;
     }
 
     public void MoveNextFruitPositionZ(bool isfront)
     {
-        if (_fallFruit == null) return;
+        if (_setFruit == null) return;
         var moveLength = new Vector3(0.0f, 0.0f, _moveSpeed);
-        _fallFruit.transform.position += isfront ? -moveLength : moveLength;
+        _setFruit.transform.position += isfront ? -moveLength : moveLength;
+    }
+
+    /// <summary>
+    /// フルーツを落とす
+    /// </summary>
+    public async UniTask FallFruit(GameObject fallFruit, CancellationToken token)
+    {
+        try
+        {
+            // キャンセルの命令が出たら処理をさせない
+            if (fallFruit == null || _setFruit == null || token.IsCancellationRequested) return;
+            _audioClip.PlayOneShot(_FallSE);
+            Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
+            rb.useGravity = true;
+
+            // 落ちるのが遅いから、落とすときに下方向の力を加える
+            rb.AddForce(rb.mass * Vector3.down * _fallPower, ForceMode.Impulse);
+            _setFruit = null;
+            _spawnFruits.SetCreateFruit(true);
+
+            // 落としたフルーツが次のフルーツとぶつからないように待つ
+            await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
+        }
+        catch
+        {
+            Debug.Log("落とすのキャンセルされた");
+            Destroy(fallFruit);
+            _setFruit = null;
+        }
     }
 
     public void SetFallFruit(GameObject fruit)
     {
-        _fallFruit = fruit;
+        _setFruit = fruit;
     }
 }

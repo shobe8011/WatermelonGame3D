@@ -21,20 +21,23 @@ public class InputReceiver : MonoBehaviour
     private void Update()
     {
         // 左クリック もしくは　エンターキーでフルーツを落とす
-        if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return)
-            && !_isCoolTime)
+        if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return))
         {
-            _isCoolTime = true;
-            _gameManager.SetFallFrag(true);
-            _clickCoolTime = 1.0f;
-        }
-        else
-        {
-            _clickCoolTime -= Time.deltaTime;
-            if(_clickCoolTime <= 0)
+            if(!_isCoolTime)
             {
-                _isCoolTime = false;
+                _clickCoolTime = 0.5f;
+                _isCoolTime = true;
+                _gameManager.SetFallFrag(true);
             }
+            else
+            {
+                _clickCoolTime -= Time.deltaTime;
+                if (_clickCoolTime <= 0)
+                {
+                    _isCoolTime = false;
+                }
+            }
+
         }
 
         // wasdでフルーツを落とす前に移動
