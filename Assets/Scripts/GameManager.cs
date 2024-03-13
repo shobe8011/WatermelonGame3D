@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour
     // 数字が小さいほうが小さいフルーツ
     public enum FruitsKinds
     {
-        cherry,
-        strawberry,
         grape, 
         dekopon,
         persimmon,
@@ -56,6 +54,8 @@ public class GameManager : MonoBehaviour
         _spawnFruits = GetComponent<SpawnFruits>();
         _scoreManager = GetComponent<ScoreManager>();
         _moveFruit = GetComponent<MoveFruit>();
+
+        // 初期のロード
         await _initializeFruits.InitializeList();
         await _initializeFruits.SetFruitsMaterial();
     }
@@ -78,10 +78,13 @@ public class GameManager : MonoBehaviour
             // フルーツをセット
             case GameState.Set:
             {
+                _gameOver.SetGameOverFlag(true);
                 // フルーツをセット
                 _nextFruit = await _spawnFruits.SetNextFruit(_cancelToken);
-                _gameState = GameState.Fall;
-                _gameOver.SetGameOverFlag(true);
+                if (_nextFruit != null)
+                {
+                    _gameState = GameState.Fall;
+                }
                 break;
             }
 

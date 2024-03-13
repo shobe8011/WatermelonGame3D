@@ -14,7 +14,7 @@ public class SpawnFruits : MonoBehaviour
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
 
-    private readonly int FIRST_CREATE_FRUIT_KINDS = 4;
+    private readonly int FIRST_CREATE_FRUIT_KINDS = 3;
     private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 275.0f, 450.0f);
     private readonly Vector3 k_beforeExplosionSize = new Vector3(0.5f, 0.5f, 0.5f);
 
@@ -28,7 +28,6 @@ public class SpawnFruits : MonoBehaviour
     [SerializeField] private GameObject _baseSphere;
     private InitializeFruits _initializeFruits = null;
     private ScoreManager _scoreManager = null;
-    private bool _canCreateFruit = true;
 
     private void Start()
     {
@@ -49,7 +48,8 @@ public class SpawnFruits : MonoBehaviour
     {
         try
         {
-            if (!_canCreateFruit || token.IsCancellationRequested) return null;
+            if (_nextFruit != null) return _nextFruit;
+            if (_nextFruit != null || token.IsCancellationRequested) return null;
 
             // 生成前に必要なものを取得
             int creatFruit;
@@ -73,7 +73,6 @@ public class SpawnFruits : MonoBehaviour
             // GameManagerの子オブジェクトにする
             _nextFruit.transform.SetParent(_fruitParent.transform);
             _moveFruit.SetFallFruit(_nextFruit);
-            _canCreateFruit = false;
             return _nextFruit;
         }
         catch
@@ -188,19 +187,8 @@ public class SpawnFruits : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// フルーツの親オブジェクトを設定
-    /// </summary>
-    public void SetCenterPosition()
+    public void ReleaseFruit()
     {
-        if(_nextFruit != null)
-        {
-            _nextFruit.transform.position = k_firstCreatePosition;
-        }
-    }
-
-    public void SetCreateFruit(bool createFlag)
-    {
-        _canCreateFruit = createFlag;
+        _nextFruit = null;
     }
 }

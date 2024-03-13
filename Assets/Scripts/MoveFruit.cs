@@ -1,5 +1,5 @@
-using UnityEngine;
-using System.Threading;  // cancellationTokenSource ‚ğg‚¤‚½‚ß‚É•K—v
+ï»¿using UnityEngine;
+using System.Threading;  // cancellationTokenSource ã‚’ä½¿ã†ãŸã‚ã«å¿…è¦
 using Cysharp.Threading.Tasks;
 
 public class MoveFruit : MonoBehaviour
@@ -10,8 +10,10 @@ public class MoveFruit : MonoBehaviour
 
     private SpawnFruits _spawnFruits = null;
     private GameObject _setFruit = null;
-    private float _moveSpeed = 1.0f;
-    private float _fallPower = 500.0f;
+
+    private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 275.0f, 450.0f);
+    private readonly float k_moveSpeed = 3.0f;
+    private readonly float k_fallPower = 500.0f;
 
     private void Awake()
     {
@@ -20,47 +22,58 @@ public class MoveFruit : MonoBehaviour
 
 
     /// <summary>
-    /// Ÿ‚É—‚Æ‚·ƒtƒ‹[ƒc‚ğˆÚ“®‚³‚¹‚é
+    /// æ¬¡ã«è½ã¨ã™ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’ç§»å‹•ã•ã›ã‚‹
     /// </summary>
     /// <param name="isRight"></param>
     public void MoveNextFruitPositionX(bool isRight)
     {
         if (_setFruit == null) return;
-        var moveLength = new Vector3(_moveSpeed, 0.0f, 0.0f);
+        var moveLength = new Vector3(k_moveSpeed, 0.0f, 0.0f);
         _setFruit.transform.position += isRight ? moveLength : -moveLength;
     }
 
     public void MoveNextFruitPositionZ(bool isfront)
     {
         if (_setFruit == null) return;
-        var moveLength = new Vector3(0.0f, 0.0f, _moveSpeed);
+        var moveLength = new Vector3(0.0f, 0.0f, k_moveSpeed);
         _setFruit.transform.position += isfront ? -moveLength : moveLength;
     }
 
     /// <summary>
-    /// ƒtƒ‹[ƒc‚ğ—‚Æ‚·
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ãŒåˆ¶é™ç¯„å›²ã‚’è¶…ãˆãŸã‚‰ä¸­å¿ƒã«æˆ»ã™
+    /// </summary>
+    public void SetCenterPosition()
+    {
+        if (_setFruit != null)
+        {
+            _setFruit.transform.position = k_firstCreatePosition;
+        }
+    }
+
+    /// <summary>
+    /// ãƒ•ãƒ«ãƒ¼ãƒ„ã‚’è½ã¨ã™
     /// </summary>
     public async UniTask FallFruit(GameObject fallFruit, CancellationToken token)
     {
         try
         {
-            // ƒLƒƒƒ“ƒZƒ‹‚Ì–½—ß‚ªo‚½‚çˆ—‚ğ‚³‚¹‚È‚¢
+            // ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã®å‘½ä»¤ãŒå‡ºãŸã‚‰å‡¦ç†ã‚’ã•ã›ãªã„
             if (fallFruit == null || _setFruit == null || token.IsCancellationRequested) return;
-            _audioClip.PlayOneShot(_FallSE);
             Rigidbody rb = fallFruit.GetComponent<Rigidbody>();
             rb.useGravity = true;
 
-            // —‚¿‚é‚Ì‚ª’x‚¢‚©‚çA—‚Æ‚·‚Æ‚«‚É‰º•ûŒü‚Ì—Í‚ğ‰Á‚¦‚é
-            rb.AddForce(rb.mass * Vector3.down * _fallPower, ForceMode.Impulse);
+            // è½ã¡ã‚‹ã®ãŒé…ã„ã‹ã‚‰ã€è½ã¨ã™ã¨ãã«ä¸‹æ–¹å‘ã®åŠ›ã‚’åŠ ãˆã‚‹
+            rb.AddForce(rb.mass * Vector3.down * k_fallPower, ForceMode.Impulse);
+            _audioClip.PlayOneShot(_FallSE);
             _setFruit = null;
-            _spawnFruits.SetCreateFruit(true);
+            _spawnFruits.ReleaseFruit();
 
-            // —‚Æ‚µ‚½ƒtƒ‹[ƒc‚ªŸ‚Ìƒtƒ‹[ƒc‚Æ‚Ô‚Â‚©‚ç‚È‚¢‚æ‚¤‚É‘Ò‚Â
+            // è½ã¨ã—ãŸãƒ•ãƒ«ãƒ¼ãƒ„ãŒæ¬¡ã®ãƒ•ãƒ«ãƒ¼ãƒ„ã¨ã¶ã¤ã‹ã‚‰ãªã„ã‚ˆã†ã«å¾…ã¤
             await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
         }
         catch
         {
-            Debug.Log("—‚Æ‚·‚ÌƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½");
+            Debug.Log("è½ã¨ã™ã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸ");
             Destroy(fallFruit);
             _setFruit = null;
         }

@@ -3,43 +3,57 @@
 public class GameOver : MonoBehaviour
 {
     [SerializeField] GameManager _gameManager;
-    private bool _canActive = false;
+    private bool _canActive = true;
     private float _coolTime = 1.0f;
 
     // コライダーにフルーツが触れた瞬間、ゲームオーバー
     private void OnCollisionEnter(Collision collision)
     {
         _gameManager.GameOver();
+        // 一回発火させたら消す
+        this.gameObject.GetComponent<BoxCollider>().enabled = false;
+        _coolTime = 1.0f;
+        _canActive = false;
     }
 
-    private void Update()
+    void Update()
     {
-        if (_canActive)
-        {
-            _coolTime = 1.0f;
-            _canActive = false;
-        }
-        else
+        if (!_canActive)
         {
             _coolTime -= Time.deltaTime;
-            this.gameObject.SetActive(false);
             if (_coolTime <= 0)
             {
                 _canActive = true;
-                this.gameObject.SetActive(true);
             }
+            return;
         }
+
+        _coolTime = 1.0f;
+        this.gameObject.GetComponent<BoxCollider>().enabled = true;
     }
 
     public void SetGameOverFlag(bool canActiveFlag)
     {
-        if (_canActive)
+        // 動ける状態で、クールタイム中でない
+        if (canActiveFlag)
         {
-            //this.gameObject.SetActive(canActiveFlag);
+            if(!_canActive)
+            {
+                _canActive = true;
+            }
         }
         else
         {
-            //this.gameObject.SetActive(false);
+            // 動けない状態で、クールタイム中 ⇒　クールタイムリセット
+            if (!_canActive)
+            {
+                _coolTime = 1.0f;
+            }
+            else
+            {
+                _canActive = false;
+                this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            }
         }
     }
 }
