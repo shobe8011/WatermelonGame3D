@@ -10,7 +10,7 @@ public class InputReceiver : MonoBehaviour
 
     private bool _isMainCameraView = true;
     private bool _isCoolTime = false;
-    private float _clickCoolTime = 0.0f;
+    private float _clickCoolTime = 1.2f;
 
     private void Start()
     {
@@ -20,18 +20,20 @@ public class InputReceiver : MonoBehaviour
 
     private void Update()
     {
-        // 左クリック もしくは　エンターキーでフルーツを落とす
-        if(Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return)
-            && !_isCoolTime)
+        // クーるタイムでなければ、落とす
+        if (!_isCoolTime)
         {
-            _isCoolTime = true;
-            _gameManager.SetFallFrag(true);
-            _clickCoolTime = 1.0f;
+            if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return))
+            {
+                _gameManager.SetFallFrag(true);
+                _clickCoolTime = 1.2f;
+                _isCoolTime = true;
+            }
         }
         else
         {
             _clickCoolTime -= Time.deltaTime;
-            if(_clickCoolTime <= 0)
+            if (_clickCoolTime <= 0)
             {
                 _isCoolTime = false;
             }

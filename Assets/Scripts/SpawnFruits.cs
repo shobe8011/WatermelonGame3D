@@ -6,7 +6,6 @@ using DG.Tweening;
 public class SpawnFruits : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioClip;
-    [SerializeField] private AudioClip _FallSE;
     [SerializeField] private AudioClip _BombSE;
     private GameManager _gameManager = null;
     private MoveFruit _moveFruit = null;
@@ -15,7 +14,7 @@ public class SpawnFruits : MonoBehaviour
     private GameManager.FruitsKinds _fruitsKind1 = GameManager.FruitsKinds.none;
     private GameManager.FruitsKinds _fruitsKind2 = GameManager.FruitsKinds.none;
 
-    private readonly int FIRST_CREATE_FRUIT_KINDS = 4;
+    private readonly int FIRST_CREATE_FRUIT_KINDS = 3;
     private readonly Vector3 k_firstCreatePosition = new Vector3(0.0f, 275.0f, 450.0f);
     private readonly Vector3 k_beforeExplosionSize = new Vector3(0.5f, 0.5f, 0.5f);
 
@@ -49,9 +48,8 @@ public class SpawnFruits : MonoBehaviour
     {
         try
         {
-            // まだ落とされていないフルーツがあったら 新しくつくらない
             if (_nextFruit != null) return _nextFruit;
-            if (token.IsCancellationRequested) return null;
+            if (_nextFruit != null || token.IsCancellationRequested) return null;
 
             // 生成前に必要なものを取得
             int creatFruit;
@@ -80,34 +78,8 @@ public class SpawnFruits : MonoBehaviour
         catch
         {
             Debug.Log("生成キャンセル");
+            Destroy(_nextFruit);
             return null;
-        }
-    }
-
-    /// <summary>
-    /// フルーツを落とす
-    /// </summary>
-    public async UniTask FallFruit(GameObject fallFruit, CancellationToken token)
-    {
-        try
-        {
-            // キャンセルの命令が出たら処理をさせない
-            if (_nextFruit == null || token.IsCancellationRequested) return;
-            _audioClip.PlayOneShot(_FallSE);
-            Rigidbody rb = _nextFruit.GetComponent<Rigidbody>();
-            rb.useGravity = true;
-
-            // 落ちるのが遅いから、落とすときに下方向の力を加える
-            rb.AddForce(rb.mass * Vector3.down * 500.0f, ForceMode.Impulse);
-            _nextFruit = null;
-            _moveFruit.SetFallFruit(null);
-
-            // 落としたフルーツが次のフルーツとぶつからないように待つ
-            await UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
-        }
-        catch
-        {
-            Debug.Log("落とすのキャンセルされた");
         }
     }
 
@@ -208,17 +180,15 @@ public class SpawnFruits : MonoBehaviour
     public void Initialization(GameObject fruitsParent)
     {
         _fruitParent = fruitsParent;
-        _nextFruit = null;
-    }
-
-    /// <summary>
-    /// フルーツの親オブジェクトを設定
-    /// </summary>
-    public void SetCenterPosition()
-    {
         if(_nextFruit != null)
         {
-            _nextFruit.transform.position = k_firstCreatePosition;
+            Destroy(_nextFruit);
+            _nextFruit = null;
         }
+    }
+
+    public void ReleaseFruit()
+    {
+        _nextFruit = null;
     }
 }

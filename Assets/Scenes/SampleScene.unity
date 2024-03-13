@@ -2296,7 +2296,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 65
+  field of view: 64.72631
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3255,7 +3255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioClip: {fileID: 1374690043}
-  _FallSE: {fileID: 8300000, guid: 5efde9502ecc1a84189f5919fe909edb, type: 3}
   _BombSE: {fileID: 8300000, guid: 922504879c39cf9419c865c29c37d123, type: 3}
   _baseSphere: {fileID: 4993790379798685705, guid: ff24ba7563c6c7947b18b502fd89cb41, type: 3}
 --- !u!114 &1374690040
@@ -3492,6 +3491,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8cdbf88ff638144aacac207816059c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audioClip: {fileID: 1374690043}
+  _FallSE: {fileID: 8300000, guid: 5efde9502ecc1a84189f5919fe909edb, type: 3}
 --- !u!1 &1405613137
 GameObject:
   m_ObjectHideFlags: 0
@@ -3820,7 +3821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b024c059537dd4fbf51486f916a089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnFruits: {fileID: 1374690039}
+  _moveFruits: {fileID: 1374690044}
 --- !u!1 &1570643373
 GameObject:
   m_ObjectHideFlags: 0
@@ -3985,8 +3986,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1625171273}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -67.17, y: -275, z: 933.5}
-  m_LocalScale: {x: 219, y: 1, z: 262.6}
+  m_LocalPosition: {x: -67.17, y: -369, z: 1023}
+  m_LocalScale: {x: 219, y: 1, z: 213.39928}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10

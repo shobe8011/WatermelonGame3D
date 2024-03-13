@@ -2,7 +2,7 @@
 
 public class FruitsMoveRestrictions : MonoBehaviour
 {
-    [SerializeField] private SpawnFruits _spawnFruits;
+    [SerializeField] private MoveFruit _moveFruits;
 
     /// <summary>
     /// フルーツが端にぶつかったら強制的に真ん中に戻す
@@ -12,7 +12,7 @@ public class FruitsMoveRestrictions : MonoBehaviour
     {
         if(collision.gameObject.tag == "Fruits")
         {
-            _spawnFruits.SetCenterPosition();
+            _moveFruits.SetCenterPosition();
         }
     }
 }

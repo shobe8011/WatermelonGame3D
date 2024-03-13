@@ -7,21 +7,18 @@ using UnityEngine.AddressableAssets;
 public class InitializeFruits
 {
     // マテリアルにアクセスるときのパス
-    private readonly int fruitsSpecies = 11;
+    private readonly int fruitsSpecies = 9;
     private readonly string headMaterialPass = "Material_";
     private bool EndInitializeList = false;
     private List<FruitsBase> fruitsBase = new List<FruitsBase>();
 
-    // 
+    /// <summary>
+    /// 果物の構造体を定義
+    /// </summary>
+    /// <returns></returns>
     public async Task InitializeList()
     {
         if (EndInitializeList) return;
-        // ゲーム開始時に全てのフルーツのデータを初期化
-        var cherry = new FruitsBase(GameManager.FruitsKinds.cherry, 20.0f, 5, "Cherry");
-        fruitsBase.Add(cherry);
-
-        var strawberry = new FruitsBase(GameManager.FruitsKinds.strawberry, 30.0f, 10, "StrawBerry");
-        fruitsBase.Add(strawberry);
 
         var grape = new FruitsBase(GameManager.FruitsKinds.grape, 45.0f, 15, "Grape");
         fruitsBase.Add(grape);
@@ -91,7 +88,7 @@ public class InitializeFruits
     {
         var fruitMaterial = fruitsBase[fruitNumber].fruitMaterial;
         // もしまだマテリアルをセットしていなかったらここでロードして渡す
-        if(fruitMaterial == null)
+        if (fruitMaterial == null)
         {
             bool complete = false;
             string fruitMaterialPass = headMaterialPass + fruitsBase[fruitNumber].fruitName;
@@ -111,36 +108,8 @@ public class InitializeFruits
             await UniTask.WaitUntil(() => complete == true);
             fruitMaterial = material;
         }
-        return fruitMaterial;                   // そのまま"Unity.Material"を返すことができない。(asyncを付けてないとき)　
-        //return fruitMaterial as Material;       // 'UnityEngine.Material' を 'Cysharp.Threading.Tasks.UniTask<UnityEngine.Material>' に変換できません
-
-        //return UniTask.FromResult(fruitMaterial);
+        return fruitMaterial;
     }
-    // やってることは↑と一緒。別の書き方
-    //public UniTask<Material> GetFruitmaterial(GameManager.FruitsKinds fruitskinds)
-    //{
-    //    var fruitMaterial = fruitsBase[(int)fruitskinds].fruitMaterial;
-    //    if (fruitMaterial != null)
-    //    {
-    //        return UniTask.FromResult(fruitMaterial);
-    //    }
-    //    // Addressables.LoadAssetAsync<Material> の結果を UniTask<Material> に変換
-    //    return Addressables.LoadAssetAsync<Material>(fruitsBase[(int)fruitskinds].materialPass).ToUniTask().ContinueWith(material =>
-    //    {
-    //        if (material == null)
-    //        {
-    //            Debug.LogError("マテリアルの取得に失敗しました");
-    //            return null;
-    //        }
-    //        fruitMaterial = material;
-    //        fruitsBase[(int)fruitskinds].SetMaterial(fruitMaterial);
-    //        return fruitMaterial;
-    //    });
-    //}
-
-    
-    // フルーツの要素全部渡す
-    
     
     public FruitsBase GetFruitsBase(int fruitNumber)
     {
