@@ -55,6 +55,7 @@ public class SpawnFruits : MonoBehaviour
             int creatFruit;
             creatFruit = Random.Range(0, FIRST_CREATE_FRUIT_KINDS);
             Vector3 fruitsSize = await _initializeFruits.GetFruitSize(creatFruit);
+
             // マテリアル取得
             var material = await _initializeFruits.GetFruitMaterial(creatFruit);
 

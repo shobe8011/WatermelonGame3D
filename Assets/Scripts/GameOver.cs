@@ -9,11 +9,17 @@ public class GameOver : MonoBehaviour
     // コライダーにフルーツが触れた瞬間、ゲームオーバー
     private void OnCollisionEnter(Collision collision)
     {
-        _gameManager.GameOver();
-        // 一回発火させたら消す
-        this.gameObject.GetComponent<BoxCollider>().enabled = false;
-        _coolTime = 1.0f;
-        _canActive = false;
+        if(collision.gameObject.tag == "Fruits")
+        {
+            // ゲームオーバーになった理由をわかりやすく
+            collision.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            _gameManager.GameOver();
+            // 一回発火させたら消す
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            _coolTime = 1.0f;
+            _canActive = false;
+        }
     }
 
     void Update()
