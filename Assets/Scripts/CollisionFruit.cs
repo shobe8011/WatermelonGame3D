@@ -1,12 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CollisionFruit : MonoBehaviour
 {
-    [SerializeField] private GameManager.FruitsKinds _fruitsKinds = GameManager.FruitsKinds.none;
+    private GameManager.FruitsKinds _fruitsKinds = GameManager.FruitsKinds.none;
     public GameManager.FruitsKinds GetFruitKind { get { return _fruitsKinds; } }
 
     private int _collisionWallCount = 0;
-    private bool _collision = false;
+    private bool _isGameOverCollider = false;   // ゲームオーバーの判定のために壁とかフルーツに当たった判定を取る
 
     public void SetFruitKind(GameManager.FruitsKinds fruitKind)
     {
@@ -16,14 +16,15 @@ public class CollisionFruit : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        var collisionFruitKind = collision.gameObject.GetComponent<CollisionFruit>();
+        _isGameOverCollider = true;
+
         if(collision.gameObject.tag == "Fruits")
         {
-            _collision = true;
+            var collisionFruitKind = collision.gameObject.GetComponent<CollisionFruit>();
 
             if (_fruitsKinds == collisionFruitKind.GetFruitKind)
             {
-                // ��̃I�u�W�F�N�g�Ɏ��̃t���[�c�𐶐�����悤�ɒʒm���΂�
+                // 上のオブジェクトに次のフルーツを生成するように通知を飛ばす
                 var parent = this.transform.parent;
                 var spawnFruit = parent.transform.parent.GetComponent<SpawnFruits>();
                 spawnFruit.CalcurationHalfPoint(_fruitsKinds, this.transform.position);
@@ -34,11 +35,11 @@ public class CollisionFruit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // ���ڂ̕ǂƂ̐ڐG�̓X���[
+        // 一回目の壁との接触はスルー
         if(other.gameObject.tag == "Wall")
         {
             _collisionWallCount++;
-            if(_collisionWallCount > 1 || _collision)
+            if(_collisionWallCount > 1 || _isGameOverCollider)
             {
                 var parentObj = this.gameObject.transform.parent.gameObject;
                 var gameManager = parentObj.transform.parent.gameObject.GetComponent<GameManager>();
