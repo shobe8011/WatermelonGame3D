@@ -22,15 +22,13 @@ public class FruitsBase
         GameManager.FruitsKinds fruitsKinds,
         float fruitSize,
         int score,
-        string fruitName,
-        Material material
+        string fruitName
     )
     {
         this.fruitsKinds = fruitsKinds;
         this.fruitSize = fruitSize;
         this.score = score;
         this.fruitName = fruitName;
-        this.fruitMaterial = material;
     }
 
     public void SetMaterial(Material material)

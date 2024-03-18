@@ -12,9 +12,6 @@ public class InitializeFruits : MonoBehaviour
     private bool EndInitializeList = false;
     private List<FruitsBase> fruitsBase = new List<FruitsBase>();
 
-
-    [SerializeField] List<Material> _materials;
-
     /// <summary>
     /// 果物の構造体を定義
     /// </summary>
@@ -23,31 +20,31 @@ public class InitializeFruits : MonoBehaviour
     {
         if (EndInitializeList) return;
 
-        var grape = new FruitsBase(GameManager.FruitsKinds.grape, 45.0f, 15, "Grape", _materials[0]);
+        var grape = new FruitsBase(GameManager.FruitsKinds.grape, 45.0f, 15, "Grape");
         fruitsBase.Add(grape);
 
-        var dekopon = new FruitsBase(GameManager.FruitsKinds.dekopon, 60.0f, 20, "Dekopon", _materials[1]);
+        var dekopon = new FruitsBase(GameManager.FruitsKinds.dekopon, 60.0f, 20, "Dekopon");
         fruitsBase.Add(dekopon);
 
-        var persimmon = new FruitsBase(GameManager.FruitsKinds.persimmon, 80.0f, 25, "Persimmon", _materials[2]);
+        var persimmon = new FruitsBase(GameManager.FruitsKinds.persimmon, 80.0f, 25, "Persimmon");
         fruitsBase.Add(persimmon);
 
-        var apple = new FruitsBase(GameManager.FruitsKinds.apple, 100.0f, 30, "Apple", _materials[3]);
+        var apple = new FruitsBase(GameManager.FruitsKinds.apple, 100.0f, 30, "Apple");
         fruitsBase.Add(apple);
 
-        var pear = new FruitsBase(GameManager.FruitsKinds.pear, 120.0f, 40, "Pear", _materials[4]);
+        var pear = new FruitsBase(GameManager.FruitsKinds.pear, 120.0f, 40, "Pear");
         fruitsBase.Add(pear);
 
-        var peach = new FruitsBase(GameManager.FruitsKinds.peach, 150.0f, 50, "Peach", _materials[5]);
+        var peach = new FruitsBase(GameManager.FruitsKinds.peach, 150.0f, 50, "Peach");
         fruitsBase.Add(peach);
 
-        var pineapple = new FruitsBase(GameManager.FruitsKinds.pinapple, 180.0f, 60, "Pineapple", _materials[6]);
+        var pineapple = new FruitsBase(GameManager.FruitsKinds.pinapple, 180.0f, 60, "Pineapple");
         fruitsBase.Add(pineapple);
 
-        var melon = new FruitsBase(GameManager.FruitsKinds.melon, 210.0f, 70, "Melon", _materials[7]);
+        var melon = new FruitsBase(GameManager.FruitsKinds.melon, 210.0f, 70, "Melon");
         fruitsBase.Add(melon);
 
-        var watermelon = new FruitsBase(GameManager.FruitsKinds.watermelon, 240.0f, 80, "Watermelon", _materials[8]);
+        var watermelon = new FruitsBase(GameManager.FruitsKinds.watermelon, 240.0f, 80, "Watermelon");
         fruitsBase.Add(watermelon);
 
         EndInitializeList = true;
@@ -69,20 +66,20 @@ public class InitializeFruits : MonoBehaviour
             Material material = null;
 
             // ロードする
-            //Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
-            //{
-            //    if (handle.Result == null)
-            //    {
-            //        Debug.LogError("マテリアルの取得に失敗しました");
-            //        return;
-            //    }
-            //    material = handle.Result;
-            //    complete = true;
-            //};
+            Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            {
+                if (handle.Result == null)
+                {
+                    Debug.LogError("マテリアルの取得に失敗しました");
+                    return;
+                }
+                material = handle.Result;
+                complete = true;
+            };
 
             // ロードが完了するまで待つ
-            //await UniTask.WaitUntil(() => complete == true);
-            //fruitsBase[i].SetMaterial(material);
+            await UniTask.WaitUntil(() => complete == true);
+            fruitsBase[i].SetMaterial(material);
         }
     }
 
@@ -97,18 +94,18 @@ public class InitializeFruits : MonoBehaviour
             string fruitMaterialPass = headMaterialPass + fruitsBase[fruitNumber].fruitName;
             Material material = null;
             // ロードする
-            //Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
-            //{
-            //    if (handle.Result == null)
-            //    {
-            //        Debug.LogError(fruitsBase[fruitNumber].fruitName + " : マテリアルの取得に失敗しました");
-            //        return;
-            //    }
-            //    material = handle.Result;
-            //    fruitsBase[fruitNumber].SetMaterial(fruitMaterial);
-            //    complete = true;
-            //};
-            //await UniTask.WaitUntil(() => complete == true);
+            Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            {
+                if (handle.Result == null)
+                {
+                    Debug.LogError(fruitsBase[fruitNumber].fruitName + " : マテリアルの取得に失敗しました");
+                    return;
+                }
+                material = handle.Result;
+                fruitsBase[fruitNumber].SetMaterial(fruitMaterial);
+                complete = true;
+            };
+            await UniTask.WaitUntil(() => complete == true);
             fruitMaterial = material;
         }
         return fruitMaterial;
