@@ -61,7 +61,6 @@
     <Compile Include="Assets\Scripts\UIViewer.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\InputReceiver.cs" />
-    <Compile Include="Assets\Scripts\GameOver.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MoveFruit.cs" />
     <Compile Include="Assets\Scripts\FruitsBase.cs" />
