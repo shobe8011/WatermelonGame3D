@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 
-public class InitializeFruits
+public class InitializeFruits : MonoBehaviour
 {
     // マテリアルにアクセスるときのパス
     private readonly int fruitsSpecies = 9;

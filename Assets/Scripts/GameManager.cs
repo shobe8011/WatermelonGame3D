@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private MoveWall _moveWall;
-    [SerializeField] private GameOver _gameOver;
     [SerializeField] private Camera _MainCamera;
     [SerializeField] private Camera _TopCamera;
     [SerializeField] private UIViewer _UIViewer;
@@ -39,7 +38,8 @@ public class GameManager : MonoBehaviour
     private CancellationToken _cancelToken;
     private SpawnFruits _spawnFruits = null;
     private MoveFruit _moveFruit = null;
-    public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
+    //public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
+    [SerializeField] public InitializeFruits _initializeFruits;
     private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
     private GameObject _fruitParent = null;
@@ -78,7 +78,6 @@ public class GameManager : MonoBehaviour
             // フルーツをセット
             case GameState.Set:
             {
-                _gameOver.SetGameOverFlag(true);
                 // フルーツをセット
                 _nextFruit = await _spawnFruits.SetNextFruit(_cancelToken);
                 if (_nextFruit != null)
@@ -103,7 +102,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 _canFall = false;
-                _gameOver.SetGameOverFlag(false);
                 await _moveFruit.FallFruit(_nextFruit, _cancelToken);
                 _nextFruit = null;
                 // GameOverになっている可能性をチェック
