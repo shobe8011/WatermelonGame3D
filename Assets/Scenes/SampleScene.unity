@@ -2077,6 +2077,7 @@ GameObject:
   - component: {fileID: 1374690042}
   - component: {fileID: 1374690043}
   - component: {fileID: 1374690044}
+  - component: {fileID: 1374690045}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2144,6 +2145,7 @@ MonoBehaviour:
   _MainCamera: {fileID: 963194227}
   _TopCamera: {fileID: 1570643375}
   _UIViewer: {fileID: 1828982761}
+  _initializeFruits: {fileID: 1374690045}
 --- !u!114 &1374690041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2363,6 +2365,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioClip: {fileID: 1374690043}
   _FallSE: {fileID: 8300000, guid: 5efde9502ecc1a84189f5919fe909edb, type: 3}
+--- !u!114 &1374690045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374690036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e491cdd2f3ff34e98b0f56baeec354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: d4dbc1050e80e694d97400eef6c16619, type: 2}
+  - {fileID: 2100000, guid: 46c7d81b3deccbe49bc0a3eac6c5d87c, type: 2}
+  - {fileID: 2100000, guid: d618f221568523440b8b8a5603e8874d, type: 2}
+  - {fileID: 2100000, guid: 46a60c5631e321a438cee41d22842ba3, type: 2}
+  - {fileID: 2100000, guid: 04d4bd32ed3eab7429d886ab6a890294, type: 2}
+  - {fileID: 2100000, guid: 4370184eb77efd54d8701cfdaae9b3ab, type: 2}
+  - {fileID: 2100000, guid: 4333806a78e20a148934b530cdaad86a, type: 2}
+  - {fileID: 2100000, guid: 9a0c3be2d256ffc4fb2cf24619c49f79, type: 2}
+  - {fileID: 2100000, guid: 52c33f19020caa849b16b6752ef6c85f, type: 2}
 --- !u!1 &1448655929
 GameObject:
   m_ObjectHideFlags: 0
@@ -2890,7 +2914,7 @@ GameObject:
   - component: {fileID: 1652929085}
   m_Layer: 0
   m_Name: OutZone
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2903,7 +2927,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1652929079}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 430.17377, y: 7.9563446, z: 388.07104}
