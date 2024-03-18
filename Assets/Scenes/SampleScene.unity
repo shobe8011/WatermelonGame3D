@@ -2141,7 +2141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveWall: {fileID: 584766287}
-  _gameOver: {fileID: 1652929085}
   _MainCamera: {fileID: 963194227}
   _TopCamera: {fileID: 1570643375}
   _UIViewer: {fileID: 1828982761}
@@ -2911,7 +2910,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1652929084}
   - component: {fileID: 1652929082}
-  - component: {fileID: 1652929085}
   m_Layer: 0
   m_Name: OutZone
   m_TagString: Wall
@@ -2946,19 +2944,6 @@ Transform:
   m_Father: {fileID: 584766286}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1652929085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652929079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9020280bd9cb95447862bad7237aab86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameManager: {fileID: 1374690040}
 --- !u!1 &1828982756
 GameObject:
   m_ObjectHideFlags: 0
@@ -3120,7 +3105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829910228}
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 175, z: 301}
+  m_LocalPosition: {x: 0, y: 170, z: 301}
   m_LocalScale: {x: 30, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 584766286}
