@@ -39,7 +39,8 @@ public class GameManager : MonoBehaviour
     private CancellationToken _cancelToken;
     private SpawnFruits _spawnFruits = null;
     private MoveFruit _moveFruit = null;
-    public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
+    //public InitializeFruits _initializeFruits { get; } = new InitializeFruits();
+    [SerializeField] public InitializeFruits _initializeFruits;
     private ScoreManager _scoreManager = null;
     private GameObject _nextFruit = null;
     private GameObject _fruitParent = null;
