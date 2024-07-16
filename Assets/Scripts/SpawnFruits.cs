@@ -57,7 +57,7 @@ public class SpawnFruits : MonoBehaviour
             Vector3 fruitsSize = await _initializeFruits.GetFruitSize(creatFruit);
 
             // マテリアル取得
-            var material = await _initializeFruits.GetFruitMaterial(creatFruit);
+            var material = await _initializeFruits.GetFruitMaterial(creatFruit, "material");
 
             // ゲームオブジェクトを生成
             _nextFruit = Instantiate(_baseSphere, k_firstCreatePosition, Quaternion.identity);

@@ -9,6 +9,7 @@ public class InitializeFruits : MonoBehaviour
     // マテリアルにアクセスるときのパス
     private readonly int fruitsSpecies = 9;
     private readonly string headMaterialPass = "Material_";
+    private readonly string k_headMaterialPass = "https://model-downloads.s3.ap-northeast-1.amazonaws.com/";
     private bool EndInitializeList = false;
     private List<FruitsBase> fruitsBase = new List<FruitsBase>();
 
@@ -61,52 +62,77 @@ public class InitializeFruits : MonoBehaviour
 
         for (int i = 0; i < fruitsSpecies; i++)
         {
-            string fruitMaterialPass = headMaterialPass + fruitsBase[i].fruitName;
-            bool complete = false;
+            //string fruitMaterialPass = headMaterialPass + fruitsBase[i].fruitName;
+            //string fruitMaterialPass = k_headMaterialPass + fruitsBase[i].fruitName + ".mat";
+            //bool complete = false;
             Material material = null;
 
-            // ロードする
-            Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            var material1 = await Addressables.LoadAssetAsync<Material>(fruitsBase[i].fruitName).Task;
+            material = material1;
+            if (material != null)
             {
-                if (handle.Result == null)
-                {
-                    Debug.LogError("マテリアルの取得に失敗しました");
-                    return;
-                }
-                material = handle.Result;
-                complete = true;
-            };
+                Debug.Log("ロード成功");
+                //return fruitMaterial;
+            }
+            else
+            {
+                Debug.LogError($"{fruitsBase[i].fruitName}がないよ");
+                //return null;
+            }
+
+            // ロードする
+            //Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            //{
+            //    if (handle.Result == null)
+            //    {
+            //        Debug.LogError("マテリアルの取得に失敗しました");
+            //        return;
+            //    }
+            //    material = handle.Result;
+            //    complete = true;
+            //};
 
             // ロードが完了するまで待つ
-            await UniTask.WaitUntil(() => complete == true);
+            //await UniTask.WaitUntil(() => complete == true);
             fruitsBase[i].SetMaterial(material);
         }
     }
 
     // フルーツのマテリアルを返す
-    public async UniTask<Material> GetFruitMaterial(int fruitNumber)
+    public async UniTask<Material> GetFruitMaterial(int fruitNumber, string address)
     {
         var fruitMaterial = fruitsBase[fruitNumber].fruitMaterial;
         // もしまだマテリアルをセットしていなかったらここでロードして渡す
         if (fruitMaterial == null)
         {
-            bool complete = false;
-            string fruitMaterialPass = headMaterialPass + fruitsBase[fruitNumber].fruitName;
-            Material material = null;
-            // ロードする
-            Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            //bool complete = false;
+            //string fruitMaterialPass = headMaterialPass + fruitsBase[fruitNumber].fruitName;
+            //Material material = null;
+            //// ロードする
+            //Addressables.LoadAssetAsync<Material>(fruitMaterialPass).Completed += handle =>
+            //{
+            //    if (handle.Result == null)
+            //    {
+            //        Debug.LogError(fruitsBase[fruitNumber].fruitName + " : マテリアルの取得に失敗しました");
+            //        return;
+            //    }
+            //    material = handle.Result;
+            //    fruitsBase[fruitNumber].SetMaterial(fruitMaterial);
+            //    complete = true;
+            //};
+            //await UniTask.WaitUntil(() => complete == true);
+
+            var material1 = await Addressables.LoadAssetAsync<Material>(address).Task;
+            fruitMaterial = material1;
+            if(fruitMaterial != null)
             {
-                if (handle.Result == null)
-                {
-                    Debug.LogError(fruitsBase[fruitNumber].fruitName + " : マテリアルの取得に失敗しました");
-                    return;
-                }
-                material = handle.Result;
-                fruitsBase[fruitNumber].SetMaterial(fruitMaterial);
-                complete = true;
-            };
-            await UniTask.WaitUntil(() => complete == true);
-            fruitMaterial = material;
+                return fruitMaterial;
+            }
+            else
+            {
+                Debug.LogError($"{address}がない");
+                return null;
+            }
         }
         return fruitMaterial;
     }

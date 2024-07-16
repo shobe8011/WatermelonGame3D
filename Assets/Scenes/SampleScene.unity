@@ -2376,16 +2376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e491cdd2f3ff34e98b0f56baeec354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _materials:
-  - {fileID: 2100000, guid: d4dbc1050e80e694d97400eef6c16619, type: 2}
-  - {fileID: 2100000, guid: 46c7d81b3deccbe49bc0a3eac6c5d87c, type: 2}
-  - {fileID: 2100000, guid: d618f221568523440b8b8a5603e8874d, type: 2}
-  - {fileID: 2100000, guid: 46a60c5631e321a438cee41d22842ba3, type: 2}
-  - {fileID: 2100000, guid: 04d4bd32ed3eab7429d886ab6a890294, type: 2}
-  - {fileID: 2100000, guid: 4370184eb77efd54d8701cfdaae9b3ab, type: 2}
-  - {fileID: 2100000, guid: 4333806a78e20a148934b530cdaad86a, type: 2}
-  - {fileID: 2100000, guid: 9a0c3be2d256ffc4fb2cf24619c49f79, type: 2}
-  - {fileID: 2100000, guid: 52c33f19020caa849b16b6752ef6c85f, type: 2}
 --- !u!1 &1448655929
 GameObject:
   m_ObjectHideFlags: 0
@@ -3144,7 +3134,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 81037d78d90175148b4b9567294f0e82, type: 2}
+  - {fileID: 2100000, guid: 46a60c5631e321a438cee41d22842ba3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
